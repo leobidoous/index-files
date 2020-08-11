@@ -1,0 +1,113 @@
+html, body {
+    height: 100%;
+}
+
+.form-navbar {
+    padding: 10px;
+    margin-right: 10px;
+}
+
+#content {
+    min-height: 100%;
+    width: 100%;
+    background-color: #d3d3d3;
+    padding: 1px;
+}
+
+.content-inside {
+    padding: 0 20px 20px 20px;
+}
+
+.content-list-empty {
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: white;
+    padding: 20px;
+}
+
+.content-scrolable {
+    overflow: auto;
+}
+
+.th-500 {
+    min-width: 500px;
+}
+
+.th-300 {
+    min-width: 300px;
+}
+
+.th-200 {
+    min-width: 200px;
+}
+
+.content-filters {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: white;
+    width: 100%;
+}
+
+.col-md {
+    margin-bottom: 20px;
+}
+
+.content-pagination {
+    margin-top: 20px;
+}
+
+.content-form {
+    padding: 20px;
+    margin: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.content-button {
+    margin-top: 20px;
+}
+
+.content-input-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.content-title {
+    padding: 10px;
+}
+
+/* footer */
+footer {
+    opacity: 0.9;
+    color: #fff;
+    position: relative;
+    padding-top: 20px;
+    bottom: 0;
+    width: 100%;
+    background-color: #000;
+}
+
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.copyright {
+    text-align: center;
+}
+
+.quicklinks {
+    text-align: center;
+}
+
+@media screen and (max-width: 991px) {
+    .form-navbar {
+        margin-top: 10px;
+    }
+}

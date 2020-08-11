@@ -1,0 +1,164 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="content-inside">
+            <div class="content-filters">
+                <form method="get">
+                    <fieldset>
+                        <div>
+                            <h6>Buscar arquivos</h6>
+                            <hr>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md">
+                                <input type="text" class="form-control" placeholder="Nome do(a) beneficiário(a)"
+                                       name="name" {% if filters.name %} value="{{ filters.name }}" {% endif %}>
+                            </div>
+                            <div class="col-md">
+                                <input type="text" class="form-control" placeholder="CPF do(a) beneficiário(a)"
+                                       name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
+                                       value="{{ filters.cpf }}" {% endif %}>
+                            </div>
+                            <div class="col-md">
+                                <input type="date" class="form-control" placeholder="Nascimento do(a) beneficiário(a)"
+                                       name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md">
+                                <input type="text" class="form-control" placeholder="Código do(a) profissional"
+                                       name="professional_code" {% if filters.professional_code %}
+                                       value="{{ filters.professional_code }}" {% endif %}>
+                            </div>
+                            <div class="col-md">
+                                <input type="text" class="form-control" placeholder="Nome do(a) profissional"
+                                       name="professional_name" {% if filters.professional_name %}
+                                       value="{{ filters.professional_name }}" {% endif %}>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md">
+                                <input type="text" class="form-control" placeholder="Número do prontuário"
+                                       name="medical_records_number" {% if filters.medical_records_number %}
+                                       value="{{ filters.medical_records_number }}" {% endif %}>
+                            </div>
+                            <div class="col-md">
+                                <input type="date" class="form-control" placeholder="Data do prontuário"
+                                       name="medical_records_date" {% if filters.medical_records_date %}
+                                       value="{{ filters.medical_records_date }}" {% endif %}>
+                            </div>
+                            <div style="margin-right: 5px; margin-left: 5px">
+                                <a href="{% url 'core:home' %}">
+                                    <button class="btn btn-outline-danger" type="button">Limpar</button>
+                                </a>
+
+                            </div>
+                            <div style="margin-right: 5px; margin-left: 5px">
+                                <button class="btn btn-info" type="submit">
+                                    Procurar
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            {% if files %}
+                <div class="content-scrolable">
+                    <table class="table table-hover table-light ">
+                        <thead class="thead-dark">
+                        <tr class="content-scrolable">
+                            <th scope="col">ID</th>
+                            <th class="th-500" scope="col">Nome Beneficiário</th>
+                            <th class="th-200" scope="col">CPF</th>
+                            <th class="th-300" scope="col">Nascimento</th>
+                            <th class="th-200" scope="col">Nº Prontuário</th>
+                            <th class="th-300" scope="col">Data Prontuário</th>
+                            <th class="th-200" scope="col">Código Profissional</th>
+                            <th class="th-500" scope="col">Profissional</th>
+                            <th class="th-500" scope="col">URL Prontuário</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for file in files %}
+                            <tr style="color: black">
+                                <th scope="row">{{ file.id }}</th>
+                                <td>{% if file.name %} {{ file.name }} {% else %} - {% endif %}</td>
+                                <td>
+                                    {% if file.cpf %}
+                                        <input value="{{ file.cpf }}"
+                                               style="border: 0; color: black; background-color: transparent" disabled
+                                               data-mask="000.000.000-00">
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{% if file.birth %} {{ file.birth|date:"d/m/Y" }} {% else %} - {% endif %}</td>
+                                <td>{% if file.medical_records_number %} {{ file.medical_records_number }} {% else %}
+                                    - {% endif %}</td>
+                                <td>{% if file.medical_records_date %}
+                                    {{ file.medical_records_date|date:"d/m/Y" }} {% else %} - {% endif %}</td>
+                                <td>{% if file.professional_code %} {{ file.professional_code }} {% else %}
+                                    - {% endif %}</td>
+                                <td>{% if file.professional_name %} {{ file.professional_name }} {% else %}
+                                    - {% endif %}</td>
+                                <td>{% if file.url %}
+                                    <a href="{{ file.url }}" target="_blank">{{ file.url }}</a>
+                                {% else %} - {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if not files %}
+                <div class="content-scrolable">
+                    <table class="table table-hover table-light ">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome Beneficiário</th>
+                            <th scope="col">CPF</th>
+                            <th scope="col">Nascimento</th>
+                            <th scope="col">Nº Prontuário</th>
+                            <th scope="col">Data Prontuário</th>
+                            <th scope="col">Código Profissional</th>
+                            <th scope="col">Profissional</th>
+                            <th scope="col">URL Prontuário</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="content-list-empty" style="background-color: white">
+                    <h4>Nenhum arquivo encontrado!</h4>
+                </div>
+            {% endif %}
+
+            {% if files %}
+                <div class="content-pagination">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+
+        </div>
+
+    {% else %}
+        <div class="content-inside">
+            <div class="container">
+                <a class="btn btn-outline-info btn-lg btn-block" href="{% url 'core:login' %}">
+                    Você está deslogado. Realizar login?
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

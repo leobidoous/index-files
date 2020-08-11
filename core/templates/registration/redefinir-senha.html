@@ -1,0 +1,32 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="content-inside">
+        <div class="content-input-card">
+            <div class="content-title">
+                <h2>Redefinir Senha</h2>
+                <hr>
+            </div>
+            <form class="form-group" method="POST">
+                {% csrf_token %}
+                <fieldset>
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {% render_field field class="form-control" %}
+                            {% for error in field.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    {% if form %}
+                        <button type="submit" class="btn btn-outline-info">Redefinir</button>
+                    {% else %}
+                        <h6>Este link não é mais válido.</h6>
+                    {% endif %}
+                </fieldset>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <meta http-equiv="REFRESH" content="0;url={% url 'core:home' %}">
+    {% else %}
+        <div class="content-inside">
+            <div id="login">
+                <form class="content-form" method="POST">
+                    {% csrf_token %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-warning">{{ error }}</div>
+                    {% endfor %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="{{ form.username.auto_id }}">{{ form.username.label }}</label>
+                            {% render_field form.username class="form-control" size="14" placeholder="Informe seu nome de usuário" %}
+                            <small id="emailHelp" class="form-text text-muted">Nós nunca compartilhamos deus dados com
+                                ninguém.</small>
+                            {% for error in form.username.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password.auto_id }}">{{ form.password.label }}</label>
+                            {% render_field form.password class="form-control" placeholder="Informe sua senha" %}
+                            {% for error in form.password.errors %}
+                                <span class="help-block">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <span>Esqueceu sua senha? </span>
+                            <a href="{% url 'core:reset_password' %}">Clique aqui!</a>
+                        </div>
+                        <button type="submit" class="btn btn-success">Entrar</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
