@@ -7,7 +7,6 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
-from pandas._libs.tslibs import strptime
 
 from core.api.v1.models.scrap import ScrapModel
 
@@ -43,7 +42,7 @@ class HomeView(ListView, LoginRequiredMixin):
         self.filters['professional_name'] = self.request.GET.get('professional_name')
         self.filters['professional_code'] = self.request.GET.get('professional_code')
 
-        qs = ScrapModel.objects.all().order_by("id")
+        qs = ScrapModel.objects.all().order_by("-date_created")
 
         if self.filters['name']:
             qs = qs.filter(name__contains=self.filters['name'])

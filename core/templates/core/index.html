@@ -136,15 +136,40 @@
                 </div>
             {% endif %}
 
-            {% if files %}
+            {% if page_obj.has_other_pages %}
                 <div class="content-pagination">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            {% if page_obj.has_previous %}
+                                {% if page_obj.previous_page_number != 1 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">Primeira</a>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                                </li>
+                            {% endif %}
+                            {% for i in page_obj.paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item active disabled"><a class="page-link">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                {% if page_obj.next_page_number != page_obj.number|add:1 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a>
+                                    </li>
+                                {% endif %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                        Última
+                                    </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>
@@ -153,12 +178,6 @@
         </div>
 
     {% else %}
-        <div class="content-inside">
-            <div class="container">
-                <a class="btn btn-outline-info btn-lg btn-block" href="{% url 'core:login' %}">
-                    Você está deslogado. Realizar login?
-                </a>
-            </div>
-        </div>
+        <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
     {% endif %}
 {% endblock %}

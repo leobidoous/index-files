@@ -19,7 +19,7 @@ class ScrapModel(models.Model):
         verbose_name_plural = 'Indexes'
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def get_full_name(self):
         return str(self)
