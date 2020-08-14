@@ -1,0 +1,12 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="content-inside">
+
+        </div>
+
+    {% else %}
+        <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
+    {% endif %}
+{% endblock %}

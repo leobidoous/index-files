@@ -108,6 +108,7 @@ django.bak/
 .mypy_cache/
 
 .idea/
+files/
 
 # Firebase Json initial config
 #.tele-entulhos-firebase-adminsdk.json

@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from core.api.v1.forms.scrap import ScrapForm
-from core.api.v1.models.scrap import ScrapModel
+from core.api.v1.forms.indexed_file import IndexedFilerForm
+from core.api.v1.models.indexed_file import IndexedFileModel
 
 
-class ScrapAdmin(admin.ModelAdmin):
-    form = ScrapForm
-    fields = ['name', 'cpf', 'birth', 'medical_records_number', 'medical_records_date', 'url']
+class IndexedFilerAdmin(admin.ModelAdmin):
+    form = IndexedFilerForm
+    fields = ['name', 'phone', 'sex', 'birth', 'medical_records_number', 'date_in', 'health_insurance', 'sector',
+              'attendance_number', 'uti', 'url']
 
 
-admin.site.register(ScrapModel, ScrapAdmin)
+admin.site.register(IndexedFileModel, IndexedFilerAdmin)

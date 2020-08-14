@@ -12,16 +12,12 @@ from io import StringIO
 
 
 def convert_pdf_to_txt():
-    start = time.time()
-    for path in pathlib.Path("files").iterdir():
-        laparams = LAParams()
-        laparams.char_margin = 0.1
-        laparams.word_margin = 0.1
-        laparams.line_margin = 0.5
-        laparams.boxes_flow = 0.5
+    start_general = time.time()
+    for path in pathlib.Path("files/AtePac_CT_6").iterdir():
+        start = time.time()
         file_handle = StringIO()
         manager = PDFResourceManager()
-        converter = TextConverter(manager, file_handle, laparams=laparams)
+        converter = TextConverter(manager, file_handle)
         interpreter = PDFPageInterpreter(manager, converter)
 
         fh = open(str(path), 'rb')
@@ -31,37 +27,42 @@ def convert_pdf_to_txt():
 
         text = file_handle.getvalue()
 
-        text = text.split("\n")
-        text = text[10:]
+        text = text.split("Sinais")[0]
+        # print(path.name)
 
-        name = text[6]
-        birth = text[7]
-        sex = text[8]
-        cpf = text[19]
-        medical_records_date = text[10]
-        medical_records_number = text[18]
-        professional = text[45]
-        professional_code = text[42]
+        name = text.split("Paciente")[1].split('Atendimento')[0]
+        birth = text.split("Data Nasc.")[1][:10]
+        sex = text.split("Sexo")[1].split('Dt. Entrada')[0]
+        phone = text.split("Telefone")[1].split('Convênio')[0]
+        sector = text.split("Setor")[1].split("Leito")[0]
+        attendance = text.split("Atendimento")[2].split('Data Nasc.')[0]
+        medical_records_number = text.split('Prontuário')[1].split('Sexo')[0]
+        date_in = text.split("Dt. Entrada")[1][:19]
+        health_insurance = text.split("Convênio")[1].split('Setor')[0]
+        uti = 'Leito{}'.format(text.split("Leito")[1])
 
         print("---" * 8)
+        print(text)
+
         print("name: {}".format(name))
         print("birth: {}".format(birth))
         print("sex: {}".format(sex))
-        print("cpf: {}".format(cpf))
-        print("medical_records_date: {}".format(medical_records_date))
+        print("phone: {}".format(phone))
+        print("sector: {}".format(sector))
+        print("attendance: {}".format(attendance))
         print("medical_records_number: {}".format(medical_records_number))
-        print("professional: {}".format(professional))
-        print("professional_code: {}".format(professional_code))
+        print("date_in: {}".format(date_in))
+        print("health_insurance: {}".format(health_insurance))
+        print("uti: {}".format(uti))
 
-        # close open handles
         converter.close()
         file_handle.close()
 
-    end = time.time() - start
-    print(end)
+        end = time.time() - start
+        print('Tempo parcial: {} seconds'.format(end))
+
+    end = time.time() - start_general
+    print('\nTempo geral: {} seconds'.format(end))
 
 
-
-txt = convert_pdf_to_txt()
-
-# print(convert_pdf_to_txt())
+convert_pdf_to_txt()

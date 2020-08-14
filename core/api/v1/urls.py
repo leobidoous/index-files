@@ -16,15 +16,16 @@ Including another URLconf
 from django.urls import include, path
 from rest_framework import routers
 
-from core.api.v1.views.scrap import ScrapViewSet
+from core.api.v1.views.indexed_file import IndexedFileViewSet
 from user.views import UserViewSet
 
 app_name = 'v1'
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='Usuários')
-router.register('indexes', ScrapViewSet, basename='Indexes')
+router.register('indexes', IndexedFileViewSet, basename='Indexes')
 
 urlpatterns = [
     path('', include(router.urls), name='endpoints'),
+    path('', include('authentication.urls'), name='authentication'),
 ]
