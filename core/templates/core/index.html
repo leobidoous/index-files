@@ -6,55 +6,43 @@
             <div class="content-filters">
                 <form method="get">
                     <fieldset>
-                        {#                        <div>#}
-                        {#                            <h6>Buscar arquivos</h6>#}
-                        {#                            <hr>#}
-                        {#                        </div>#}
+                        <div>
+                            <h5><b>Procurar arquivos</b></h5>
+                            <hr>
+                        </div>
                         <div class="form-row">
                             <div class="col-md">
-                                <label for="name">Nome do beneficiário</label>
+                                <label for="name">Nome do Paciente</label>
                                 <input type="text" class="form-control"
-                                       placeholder="Informe o nome do(a) beneficiário(a)"
+                                       placeholder="Informe o nome do paciente"
                                        name="name" {% if filters.name %} value="{{ filters.name }}" {% endif %}
                                        id="name">
                             </div>
                             <div class="col-md">
-                                <label for="cpf">Nome do beneficiário</label>
-                                <input type="text" class="form-control" placeholder="CPF do(a) beneficiário(a)"
+                                <label for="cpf">Informe o CPF do Paciente</label>
+                                <input type="text" class="form-control" placeholder="CPF do paciente"
                                        name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
                                        value="{{ filters.cpf }}" {% endif %} id="cpf">
                             </div>
                             <div class="col-md">
-                                <label for="birth">Nascimento do(a) beneficiário(a)</label>
-                                <input type="date" class="form-control" placeholder="Nascimento do(a) beneficiário(a)"
+                                <label for="birth">Data de Nascimento do Paciente</label>
+                                <input type="date" class="form-control"
+                                       placeholder="Informe a data de nascimento do paciente"
                                        name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}
                                        id="birth">
                             </div>
                         </div>
+
                         <div class="form-row">
                             <div class="col-md">
-                                <label for="name">Nome do beneficiário</label>
-                                <input type="text" class="form-control" placeholder="Código do(a) profissional"
-                                       name="professional_code" {% if filters.professional_code %}
-                                       value="{{ filters.professional_code }}" {% endif %}>
-                            </div>
-                            <div class="col-md">
-                                <label for="name">Nome do beneficiário</label>
-                                <input type="text" class="form-control" placeholder="Nome do(a) profissional"
-                                       name="professional_name" {% if filters.professional_name %}
-                                       value="{{ filters.professional_name }}" {% endif %}>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md">
-                                <label for="medical_records_number">Número do prontuário</label>
+                                <label for="medical_records_number">Número do Prontuário</label>
                                 <input type="text" class="form-control" placeholder="Informe o número do prontuário"
                                        name="medical_records_number" {% if filters.medical_records_number %}
                                        value="{{ filters.medical_records_number }}" {% endif %}
                                        id="medical_records_number">
                             </div>
                             <div class="col-md">
-                                <label for="attendance_number">Número do atendimento</label>
+                                <label for="attendance_number">Número do Atendimento</label>
                                 <input type="text" class="form-control" placeholder="Informe o número do atendimento"
                                        name="attendance_number" {% if filters.attendance_number %}
                                        value="{{ filters.attendance_number }}" {% endif %} id="attendance_number">
@@ -65,18 +53,22 @@
                                        name="attendance_number" {% if filters.sector %}
                                        value="{{ filters.sector }}" {% endif %} id="sector">
                             </div>
-                            <div style="margin-right: 5px; margin-left: 5px">
-                                <a href="{% url 'core:home' %}">
-                                    <button class="btn btn-outline-danger" type="button">Limpar</button>
-                                </a>
 
-                            </div>
-                            <div style="margin-right: 5px; margin-left: 5px">
-                                <button class="btn btn-info" type="submit">
-                                    Procurar
-                                </button>
-                            </div>
+
                         </div>
+                    <div class="form-row">
+                                <div style="margin-right: 5px; margin-left: 5px">
+                                    <a href="{% url 'core:home' %}">
+                                        <button class="btn btn-outline-danger" type="button">Limpar</button>
+                                    </a>
+
+                                </div>
+                                <div style="margin-right: 5px; margin-left: 5px">
+                                    <button class="btn btn-info" type="submit">
+                                        Procurar
+                                    </button>
+                                </div>
+                            </div>
                     </fieldset>
                 </form>
             </div>

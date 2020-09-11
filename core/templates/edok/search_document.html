@@ -1,0 +1,49 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="content-inside">
+            <div class="content-filters">
+                <form method="get">
+                    <fieldset>
+                        <div>
+                            <h5><b>Buscar arquivos no eDok</b></h5>
+                            <hr>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="col-md">
+                                <label for="attendance_number">Número do documento</label>
+                                <input type="text" class="form-control" placeholder="Informe o número do documento"
+                                       name="doc_id" {% if filters.doc_id %}
+                                       value="{{ filters.doc_id }}" {% endif %} id="doc_id">
+                            </div>
+
+                            <button class="btn btn-info" onclick="searchDocument()">
+                                Procurar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>
+
+    {% else %}
+        <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
+    {% endif %}
+
+    <script>
+
+        function searchDocument() {
+            let doc_id = document.getElementById('doc_id').value
+
+            if (doc_id.length === 6) {
+                doc_id = '0000' + doc_id
+            }
+            window.open("{{url}}&ID=" + doc_id)
+        }
+    </script>
+{% endblock %}
+

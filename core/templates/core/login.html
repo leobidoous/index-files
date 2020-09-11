@@ -1,4 +1,4 @@
-{% extends "core/base_view.html" %}
+{% extends "core/base_login.html" %}
 {% load static %}
 {% load widget_tweaks %}
 {% block content %}
@@ -16,8 +16,6 @@
                         <div class="form-group">
                             <label for="{{ form.username.auto_id }}">{{ form.username.label }}</label>
                             {% render_field form.username class="form-control" size="14" placeholder="Informe seu nome de usuário" %}
-                            <small id="emailHelp" class="form-text text-muted">Nós nunca compartilhamos deus dados com
-                                ninguém.</small>
                             {% for error in form.username.errors %}
                                 <span class="help-block">{{ error }}</span>
                             {% endfor %}
@@ -29,10 +27,10 @@
                                 <span class="help-block">{{ error }}</span>
                             {% endfor %}
                         </div>
-                        <div class="form-group">
-                            <span>Esqueceu sua senha? </span>
-                            <a href="{% url 'core:reset_password' %}">Clique aqui!</a>
-                        </div>
+{#                        <div class="form-group">#}
+{#                            <span>Esqueceu sua senha? </span>#}
+{#                            <a href="{% url 'core:reset_password' %}">Clique aqui!</a>#}
+{#                        </div>#}
                         <button type="submit" class="btn btn-success">Entrar</button>
                     </fieldset>
                 </form>

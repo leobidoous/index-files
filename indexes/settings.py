@@ -13,8 +13,8 @@ import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import dj_database_url
-import django_heroku
+# import dj_database_url
+# import django_heroku
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # apps
     'user',
     'authentication',
+    'edok',
 
 ]
 
@@ -188,8 +189,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'uploaded_files')
 
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -199,9 +200,11 @@ LOGIN_URL = 'authentication:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_URL = 'authentication:login'
 
+EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
+
 try:
     from .local_settings import *
 except ImportError:
     print("BACKEND EM PRODUÇÃO")
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
