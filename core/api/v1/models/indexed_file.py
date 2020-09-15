@@ -5,7 +5,7 @@ class IndexedFileModel(models.Model):
     sexs = (('Masculino', 'Masculino'), ('Feminino', 'Feminino'))
 
     name = models.CharField('Nome do(a) beneficiário(a)', max_length=255, null=True, blank=True)
-    filename = models.CharField('Nome do arquivo', max_length=255)
+    filename = models.CharField('Nome do arquivo', max_length=255, unique=True)
     phone = models.CharField('Telefone do(a) beneficiário(a)', max_length=20, null=True, blank=True)
     birth = models.DateTimeField('Nascimento do(a) beneficiário(a)', null=True, blank=True)
     medical_records_number = models.CharField('Número do prontuário', null=True, max_length=30, blank=True)

@@ -27,9 +27,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'qz2y0%mfa5n&azpkd1t$g6$k8%=)8s6$idc34u_u!8@ds3kz3q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['prontuario.ahlabs.net']
 
 
 # Application definition
@@ -91,8 +91,11 @@ WSGI_APPLICATION = 'indexes.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'indexfiles',
+        'HOST': '144.22.112.15',
+        'USER': 'postgres',
+        'PASSWORD': 'DA-amh-2019'
     }
 }
 
@@ -201,6 +204,10 @@ LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
+
+PATH_FILES = "/mnt/tasyschedulerweb/"
+
+URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
 try:
     from .local_settings import *

@@ -21,10 +21,12 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pdfminer.converter import TextConverter
 
+from django.conf import settings
+
 
 def pdf_to_file():
-    for index, path in enumerate(pathlib.Path("files/AtePac_CT_6").iterdir()):
-        start = time.time()
+    for index, path in enumerate(pathlib.Path(settings.PATH_FILES).iterdir()):
+        # start = time.time()
         file_handle = StringIO()
         manager = PDFResourceManager()
         converter = TextConverter(manager, file_handle)
@@ -54,15 +56,19 @@ def pdf_to_file():
             'uti': 'Leito{}'.format(text.split("Leito")[1])
         })
 
-        indexed_file_serializer = IndexedFileSerializer(data=indexed_file)
-        indexed_file_serializer.is_valid(raise_exception=True)
-        indexed_file = indexed_file_serializer.save()
+        try:
+            indexed_file_serializer = IndexedFileSerializer(data=indexed_file)
+            indexed_file_serializer.is_valid(raise_exception=True)
+            indexed_file = indexed_file_serializer.save()
+        except Exception as e:
+            print(e)
+            pass
 
         converter.close()
         file_handle.close()
 
-        end = time.time() - start
-        print('Tempo parcial: {} seconds'.format(end))
+        # end = time.time() - start
+        # print('Tempo parcial: {} seconds'.format(end))
 
         yield Response(indexed_file)
 
@@ -71,7 +77,7 @@ class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
     queryset = IndexedFileModel.objects.all().order_by('-date_created')
     serializer_class = IndexedFileSerializer
     pagination_class = DefaultResultsSetPagination
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

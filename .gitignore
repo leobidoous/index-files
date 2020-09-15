@@ -112,3 +112,10 @@ files/
 
 # Firebase Json initial config
 #.tele-entulhos-firebase-adminsdk.json
+
+#pycharm
+.idea/*
+
+# migrations
+**/migrations/*
+!**/migrations/__init__.py
