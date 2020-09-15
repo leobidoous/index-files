@@ -27,7 +27,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'qz2y0%mfa5n&azpkd1t$g6$k8%=)8s6$idc34u_u!8@ds3kz3q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['prontuario.ahlabs.net']
 
