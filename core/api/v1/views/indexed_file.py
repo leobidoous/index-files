@@ -36,7 +36,7 @@ def pdf_to_file():
         fh = open(str(path), 'rb')
         for page in PDFPage.get_pages(fh, maxpages=1):
             interpreter.process_page(page)
-        shutil.move(fh.name, settings.PATH_MOVE_FILES_TO+path.stem)
+        shutil.move(fh.name, settings.PATH_MOVE_FILES_TO+path.stem+'.pdf')
         fh.close()
 
         text = file_handle.getvalue()
@@ -56,7 +56,7 @@ def pdf_to_file():
             'date_in': datetime.datetime.strptime(text.split("Dt. Entrada")[1][:19], '%d/%m/%Y %H:%M:%S'),
             'health_insurance': text.split("Convênio")[1].split('Setor')[0],
             'uti': 'Leito{}'.format(text.split("Leito")[1]),
-            'url': 'https://www.'+settings.SITE_NAME+settings.MEDIA_URL+path.stem
+            'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem
         })
 
         try:
