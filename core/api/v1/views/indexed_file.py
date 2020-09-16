@@ -22,6 +22,7 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.converter import TextConverter
 
 from django.conf import settings
+import shutil
 
 
 def pdf_to_file():
@@ -35,6 +36,7 @@ def pdf_to_file():
         fh = open(str(path), 'rb')
         for page in PDFPage.get_pages(fh, maxpages=1):
             interpreter.process_page(page)
+        shutil.move(fh.name, settings.PATH_MOVE_FILES_TO+path.stem)
         fh.close()
 
         text = file_handle.getvalue()
@@ -53,7 +55,8 @@ def pdf_to_file():
             'medical_records_number': text.split('Prontuário')[1].split('Sexo')[0],
             'date_in': datetime.datetime.strptime(text.split("Dt. Entrada")[1][:19], '%d/%m/%Y %H:%M:%S'),
             'health_insurance': text.split("Convênio")[1].split('Setor')[0],
-            'uti': 'Leito{}'.format(text.split("Leito")[1])
+            'uti': 'Leito{}'.format(text.split("Leito")[1]),
+            'url': 'https://www.'+settings.SITE_NAME+settings.MEDIA_URL+path.stem
         })
 
         try:

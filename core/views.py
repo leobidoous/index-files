@@ -36,8 +36,8 @@ class HomeView(ListView, LoginRequiredMixin):
         return context
 
     def get_queryset(self, *args, **kwargs):
-        self.filters['sex'] = self.request.GET.get('sex')
-        self.filters['uti'] = self.request.GET.get('uti')
+        # self.filters['sex'] = self.request.GET.get('sex')
+        # self.filters['uti'] = self.request.GET.get('uti')
         self.filters['name'] = self.request.GET.get('name')
         self.filters['birth'] = self.request.GET.get('birth')
         self.filters['sector'] = self.request.GET.get('sector')
@@ -48,10 +48,10 @@ class HomeView(ListView, LoginRequiredMixin):
 
         qs = IndexedFileModel.objects.all().order_by("-date_created")
 
-        if self.filters['sex']:
-            qs = qs.filter(sex=self.filters['sex'])
-        if self.filters['uti']:
-            qs = qs.filter(uti__contains=self.filters['uti'])
+        # if self.filters['sex']:
+        #     qs = qs.filter(sex=self.filters['sex'])
+        # if self.filters['uti']:
+        #     qs = qs.filter(uti__contains=self.filters['uti'])
         if self.filters['name']:
             qs = qs.filter(name__contains=self.filters['name'])
         if self.filters['birth']:
@@ -62,6 +62,12 @@ class HomeView(ListView, LoginRequiredMixin):
         if self.filters['date_in']:
             date = datetime.datetime.strptime(self.filters['date_in'], '%Y-%m-%d')
             qs = qs.filter(date_in__day=date.day, date_in__month=date.month, date_in__year=date.year)
+        if self.filters['sector']:
+            qs = qs.filter(sector__icontains=self.filters['sector'])
+        if self.filters['health_insurance']:
+            qs = qs.filter(health_insurance__icontains=self.filters['health_insurance'])
+        if self.filters['attendance_number']:
+            qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
         # if self.filters['professional_name']:
         #     qs = qs.filter(professional_name__contains=self.filters['professional_name'])
         # if self.filters['professional_code']:

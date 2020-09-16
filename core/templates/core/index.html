@@ -8,6 +8,7 @@
                     <fieldset>
                         <div>
                             <h5><b>Procurar arquivos</b></h5>
+                            <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
                         </div>
                         <div class="form-row">
@@ -50,8 +51,15 @@
                             <div class="col-md">
                                 <label for="sector">Setor</label>
                                 <input type="text" class="form-control" placeholder="Informe o setor"
-                                       name="attendance_number" {% if filters.sector %}
+                                       name="sector" {% if filters.sector %}
                                        value="{{ filters.sector }}" {% endif %} id="sector">
+                            </div>
+                            <div class="col-md">
+                                <label for="birth">Data de Entrada do Paciente</label>
+                                <input type="date" class="form-control"
+                                       placeholder="Informe a data de nascimento do paciente"
+                                       name="date_in" {% if filters.date_in %} value="{{ filters.date_in }}" {% endif %}
+                                       id="date_in">
                             </div>
 
 
@@ -80,10 +88,11 @@
                         <tr class="content-scrolable">
                             <th scope="col">Arquivo</th>
                             <th class="th-500" scope="col">Nome Beneficiário</th>
-                            <th class="th-300" scope="col">Nascimento</th>
+                            <th class="th-200" scope="col">Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-300" scope="col">Data Entrada</th>
+                            <th class="th-200" scope="col">Data Entrada</th>
+                            <th class="th-300" scope="col">Setor</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -111,6 +120,8 @@
                                     - {% endif %}</td>
                                 <td>{% if file.date_in %}
                                     {{ file.date_in|date:"d/m/Y" }} {% else %} - {% endif %}</td>
+                                <td>{% if file.sector %}
+                                    {{ file.sector }} {% else %} - {% endif %}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

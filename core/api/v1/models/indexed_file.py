@@ -15,7 +15,7 @@ class IndexedFileModel(models.Model):
     sector = models.CharField('Setor', max_length=255, null=True, blank=True)
     attendance_number = models.CharField('Número do atendimento', max_length=255, null=True, blank=True)
     uti = models.CharField('Número do leito', max_length=255, null=True, blank=True)
-    url = models.URLField('Link prontuário', null=True, blank=True)
+    url = models.CharField('Link prontuário', max_length=200, null=True, blank=True)
 
     date_created = models.DateTimeField('Criado em:', auto_now_add=True)
     last_update = models.DateTimeField('Atualizado em:', auto_now=True)

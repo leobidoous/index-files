@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from indexes import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -22,3 +24,8 @@ urlpatterns = [
     path('', include('core.urls', namespace="core")),
     path('', include('edok.urls', namespace='edok')),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,6 +29,8 @@ SECRET_KEY = 'qz2y0%mfa5n&azpkd1t$g6$k8%=)8s6$idc34u_u!8@ds3kz3q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_NAME = 'prontuario.ahlabs.net'
+
 ALLOWED_HOSTS = ['prontuario.ahlabs.net',
                  '172.20.0.38']
 
@@ -185,12 +187,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = "/media/"
-
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'uploaded_files')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # db_from_env = dj_database_url.config(conn_max_age=500)
@@ -207,6 +206,8 @@ LOGOUT_URL = 'authentication:login'
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
 PATH_FILES = "/mnt/tasyschedulerweb/"
+
+PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
