@@ -4,7 +4,7 @@ import re
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
-
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
@@ -33,6 +33,9 @@ class HomeView(ListView, LoginRequiredMixin):
     def get_context_data(self, *args, object_list=None, **kwargs):
         context = super(HomeView, self).get_context_data(object_list=None, **kwargs)
         context['filters'] = self.filters
+        url = 'https://intcare.edok.com.br/api/DocView.php?'
+        url += 'k=' + settings.EDOK_API_KEY
+        context['url'] = url
         return context
 
     def get_queryset(self, *args, **kwargs):
