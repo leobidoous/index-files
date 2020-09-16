@@ -26,6 +26,10 @@ import shutil
 
 
 def pdf_to_file():
+    print('ir para o for')
+    print(pathlib.Path(settings.PATH_FILES))
+    print(enumerate(pathlib.Path(settings.PATH_FILES).iterdir()))
+
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES).iterdir()):
         print('lendo arquivo')
 
