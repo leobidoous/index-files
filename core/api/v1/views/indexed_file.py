@@ -26,12 +26,7 @@ import shutil
 
 
 def pdf_to_file():
-    print('ir para o for')
-    print(pathlib.Path(settings.PATH_FILES))
-    print(enumerate(pathlib.Path(settings.PATH_FILES).iterdir()))
-
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES).iterdir()):
-        print('lendo arquivo')
 
         # start = time.time()
         file_handle = StringIO()
@@ -62,27 +57,22 @@ def pdf_to_file():
             'date_in': datetime.datetime.strptime(text.split("Dt. Entrada")[1][:19], '%d/%m/%Y %H:%M:%S'),
             'health_insurance': text.split("Convênio")[1].split('Setor')[0],
             'uti': 'Leito{}'.format(text.split("Leito")[1]),
-            'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem
+            'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
         })
 
         try:
-            print('entrei try')
-
             indexed_file_serializer = IndexedFileSerializer(data=indexed_file)
             indexed_file_serializer.is_valid(raise_exception=True)
             indexed_file = indexed_file_serializer.save()
         except Exception as e:
             print(e)
             pass
-        print('sai try')
 
         converter.close()
         file_handle.close()
 
         # end = time.time() - start
         # print('Tempo parcial: {} seconds'.format(end))
-
-        print('terminando funcao')
 
         yield Response(indexed_file)
 
@@ -95,10 +85,7 @@ class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        print('entrei na view')
         stream = pdf_to_file()
-        print('li arquivo')
         response = StreamingHttpResponse(stream, content_type='application/json', status=200)
-        print('vou responder')
 
         return response
