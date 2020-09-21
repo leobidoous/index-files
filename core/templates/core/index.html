@@ -86,7 +86,8 @@
                     <table class="table table-hover table-light ">
                         <thead class="thead-dark">
                         <tr class="content-scrolable">
-                            <th class="th-500" scope="col">Nome Beneficiário</th>
+                            <th class="th-300" scope="col">Paciente</th>
+                            <th class="th-200" scope="col">CPF</th>
                             <th class="th-200" scope="col">Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
@@ -94,7 +95,6 @@
                             <th class="th-300" scope="col">Setor</th>
                             <th scope="col">Arquivo</th>
                             <th scope="col">eDok</th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -102,6 +102,7 @@
                             <tr>
 
                                 <td>{% if file.name %} {{ file.name }} {% else %} - {% endif %}</td>
+                                <td>{% if file.nr_cpf %} {{ file.nr_cpf }} {% else %} - {% endif %}</td>
                                 <td>{% if file.birth %} {{ file.birth|date:"d/m/Y" }} {% else %} - {% endif %}</td>
                                 <td>{% if file.medical_records_number %} {{ file.medical_records_number }} {% else %}
                                     - {% endif %}</td>
@@ -152,12 +153,15 @@
                     <table class="table table-hover table-light ">
                         <thead class="thead-dark">
                         <tr class="content-scrolable">
-                            <th scope="col">Arquivo</th>
-                            <th class="th-500" scope="col">Nome Beneficiário</th>
-                            <th class="th-300" scope="col">Nascimento</th>
+                            <th class="th-300" scope="col">Paciente</th>
+                            <th class="th-200" scope="col">CPF</th>
+                            <th class="th-200" scope="col">Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-300" scope="col">Data Entrada</th>
+                            <th class="th-200" scope="col">Data Entrada</th>
+                            <th class="th-300" scope="col">Setor</th>
+                            <th scope="col">Arquivo</th>
+                            <th scope="col">eDok</th>
                         </tr>
                         </thead>
                     </table>

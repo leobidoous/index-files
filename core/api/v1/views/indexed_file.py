@@ -9,6 +9,7 @@ from pprint import pprint
 from django.db import transaction
 
 from django.http import StreamingHttpResponse
+from pdfminer.layout import LAParams
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -29,9 +30,10 @@ def pdf_to_file():
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES).iterdir()):
 
         # start = time.time()
+
         file_handle = StringIO()
         manager = PDFResourceManager()
-        converter = TextConverter(manager, file_handle)
+        converter = TextConverter(manager, file_handle, laparams=LAParams(char_margin=0.01))
         interpreter = PDFPageInterpreter(manager, converter)
 
         fh = open(str(path), 'rb')
@@ -42,21 +44,21 @@ def pdf_to_file():
 
         text = file_handle.getvalue()
 
-        text = text.split("Sinais")[0]
-        text = text.split("Evolução")[0]
+        text = text.split('EVOLUÇÃO')[0].split('\n')
 
         indexed_file = dict({
             'filename': path.name,
-            'name': text.split("Paciente")[1].split('Atendimento')[0],
-            'birth': datetime.datetime.strptime(text.split("Data Nasc.")[1][:10], '%d/%m/%Y'),
-            'sex': text.split("Sexo")[1].split('Dt. Entrada')[0],
-            'phone': text.split("Telefone")[1].split('Convênio')[0],
-            'sector': text.split("Setor")[1].split("Leito")[0],
-            'attendance_number': text.split("Atendimento")[2].split('Data Nasc.')[0],
-            'medical_records_number': text.split('Prontuário')[1].split('Sexo')[0],
-            'date_in': datetime.datetime.strptime(text.split("Dt. Entrada")[1][:19], '%d/%m/%Y %H:%M:%S'),
-            'health_insurance': text.split("Convênio")[1].split('Setor')[0],
-            'uti': 'Leito{}'.format(text.split("Leito")[1]),
+            'name': text[7],
+            'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
+            'sex': text[9],
+            'nr_cpf': text[10],
+            'sector': text[32],
+            'attendance_number': text[40],
+            'medical_records_number': text[41],
+            'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
+            'health_insurance': text[31],
+            'uti': text[33],
+            'location': text[43],
             'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
         })
 
