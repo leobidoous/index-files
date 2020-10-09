@@ -5,9 +5,8 @@ from django.core import validators
 import uuid
 import re
 from core.api.v1.models.indexed_file import Location, HealthInsurance
-from django.contrib.auth.hashers import (
-    check_password, is_password_usable, make_password, identify_hasher,
-)
+from django.contrib.auth.hashers import identify_hasher
+
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, verbose_name=_('uuid'), default=uuid.uuid4,
@@ -55,11 +54,10 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return str(self).split(" ")[0]
-    
+
     def save(self, *args, **kwargs):
         try:
             identify_hasher(self.password)
         except ValueError:
             self.set_password(self.password)
         super(UserModel, self).save(*args, **kwargs)
-
