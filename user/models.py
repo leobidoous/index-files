@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 import uuid
 import re
+from core.api.v1.models.indexed_file import Location, HealthInsurance
 
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
@@ -20,6 +21,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
             )
         ], help_text='Um nome curto que será usado para identificá-lo de forma única na plataforma'
     )
+    nickname = models.CharField("Com quer ser chamado", max_length=255, unique=True)
     email = models.EmailField('E-mail', unique=True, null=True, blank=True)
     password = models.CharField("Senha", max_length=255)
     is_staff = models.BooleanField('Time', default=False)
@@ -27,6 +29,9 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField('Super Usuário', default=False)
     date_joined = models.DateTimeField('Criado em:', auto_now_add=True)
     last_update = models.DateTimeField('Atualizado em:', auto_now=True)
+
+    locations = models.ManyToManyField(Location, related_name='users', blank=True)
+    health_insurances = models.ManyToManyField(HealthInsurance, related_name='users', blank=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -48,3 +53,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return str(self).split(" ")[0]
+    
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super(UserModel, self).save(*args, **kwargs)

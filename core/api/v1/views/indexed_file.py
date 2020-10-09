@@ -14,7 +14,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.api.v1.models.indexed_file import IndexedFileModel
+from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance
 from core.api.v1.serializers.indexed_file import IndexedFileSerializer
 from core.pagination import DefaultResultsSetPagination
 
@@ -46,7 +46,7 @@ def pdf_to_file():
 
         text = text.split('EVOLUÇÃO')[0].split('\n')
 
-        indexed_file = dict({
+        indexed_file_dict = {
             'filename': path.name,
             'name': text[7],
             'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
@@ -56,16 +56,22 @@ def pdf_to_file():
             'attendance_number': text[40],
             'medical_records_number': text[41],
             'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
-            'health_insurance': text[31],
+            'date_file': datetime.datetime.strptime(text[12], '%d/%m/%Y'),
             'uti': text[33],
-            'location': text[43],
             'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
-        })
+        }
+
+        if text[43]:
+            location, created = Location.objects.get_or_create(location=text[43])
+            indexed_file_dict['location'] = location.pk
+        if text[31]:
+            health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[31])
+            indexed_file_dict['health_insurance'] = health_insurance.pk
 
         try:
-            indexed_file_serializer = IndexedFileSerializer(data=indexed_file)
+            indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
             indexed_file_serializer.is_valid(raise_exception=True)
-            indexed_file = indexed_file_serializer.save()
+            indexed_file_serializer.save()
         except Exception as e:
             print(e)
             pass
@@ -76,7 +82,7 @@ def pdf_to_file():
         # end = time.time() - start
         # print('Tempo parcial: {} seconds'.format(end))
 
-        yield Response(indexed_file)
+        yield Response(indexed_file_dict)
 
 
 class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):

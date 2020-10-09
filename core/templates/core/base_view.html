@@ -62,7 +62,7 @@
         <form class="form-inline my-2 my-lg-0">
             {% if user.is_authenticated %}
                 <a class="btn btn-outline-info my-2 my-sm-0 form-navbar" href="{% url 'core:home' %}">
-                    {{ user.username }}
+                    Bem vindo, {{ user.nickname }}
                 </a>
                 <a class="btn btn-outline-danger my-2 my-sm-0 form-navbar" href="{% url 'core:logout' %}"> Logout </a>
             {% else %}

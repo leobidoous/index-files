@@ -39,9 +39,9 @@ class HomeView(ListView, LoginRequiredMixin):
         return context
 
     def get_queryset(self, *args, **kwargs):
-        # self.filters['sex'] = self.request.GET.get('sex')
-        # self.filters['uti'] = self.request.GET.get('uti')
+        user = self.request.user
         self.filters['name'] = self.request.GET.get('name')
+        self.filters['nr_cpf'] = self.request.GET.get('cpf')
         self.filters['birth'] = self.request.GET.get('birth')
         self.filters['sector'] = self.request.GET.get('sector')
         self.filters['date_in'] = self.request.GET.get('date_in')
@@ -49,34 +49,42 @@ class HomeView(ListView, LoginRequiredMixin):
         self.filters['attendance_number'] = self.request.GET.get('attendance_number')
         self.filters['medical_records_number'] = self.request.GET.get('medical_records_number')
 
-        qs = IndexedFileModel.objects.all().order_by("-date_created")
+        if not user.is_anonymous:
+            if user.is_superuser:
+                qs = IndexedFileModel.objects.all().order_by("-date_created")
+            else:
+                locations_user = user.locations.all()
+                health_insurance_user = user.health_insurances.all()
+    
+                locations = []
+                for obj in locations_user:
+                    locations.append(obj.pk)
+                health_insurance = []
+                for obj in health_insurance_user:
+                    health_insurance.append(obj.pk)
 
-        # if self.filters['sex']:
-        #     qs = qs.filter(sex=self.filters['sex'])
-        # if self.filters['uti']:
-        #     qs = qs.filter(uti__contains=self.filters['uti'])
-        if self.filters['name']:
-            qs = qs.filter(name__contains=self.filters['name'])
-        if self.filters['birth']:
-            date = datetime.datetime.strptime(self.filters['birth'], '%Y-%m-%d')
-            qs = qs.filter(birth__day=date.day, birth__month=date.month, birth__year=date.year)
-        if self.filters['medical_records_number']:
-            qs = qs.filter(medical_records_number=self.filters['medical_records_number'])
-        if self.filters['date_in']:
-            date = datetime.datetime.strptime(self.filters['date_in'], '%Y-%m-%d')
-            qs = qs.filter(date_in__day=date.day, date_in__month=date.month, date_in__year=date.year)
-        if self.filters['sector']:
-            qs = qs.filter(sector__icontains=self.filters['sector'])
-        if self.filters['health_insurance']:
-            qs = qs.filter(health_insurance__icontains=self.filters['health_insurance'])
-        if self.filters['attendance_number']:
-            qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
-        # if self.filters['professional_name']:
-        #     qs = qs.filter(professional_name__contains=self.filters['professional_name'])
-        # if self.filters['professional_code']:
-        #     qs = qs.filter(professional_code=self.filters['professional_code'])
-
-        return qs
+                qs = IndexedFileModel.objects.filter(location__id__in=locations).filter(
+                    health_insurance__id__in=health_insurance).all().order_by("-date_created")
+    
+            if self.filters['name']:
+                qs = qs.filter(name__contains=self.filters['name'])
+            if self.filters['birth']:
+                date = datetime.datetime.strptime(self.filters['birth'], '%Y-%m-%d')
+                qs = qs.filter(birth__day=date.day, birth__month=date.month, birth__year=date.year)
+            if self.filters['medical_records_number']:
+                qs = qs.filter(medical_records_number=self.filters['medical_records_number'])
+            if self.filters['date_in']:
+                date = datetime.datetime.strptime(self.filters['date_in'], '%Y-%m-%d')
+                qs = qs.filter(date_in__day=date.day, date_in__month=date.month, date_in__year=date.year)
+            if self.filters['sector']:
+                qs = qs.filter(sector__icontains=self.filters['sector'])
+            if self.filters['nr_cpf']:
+                qs = qs.filter(nr_cpf__iexact=self.filters['nr_cpf'].replace('.', '').replace('-', ''))
+            if self.filters['attendance_number']:
+                qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
+    
+            return qs
+        return super(HomeView, self).get_queryset()
 
 
 class SolicitarRedefinirSenha(PasswordResetView):

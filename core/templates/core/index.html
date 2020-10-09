@@ -88,11 +88,12 @@
                         <tr class="content-scrolable">
                             <th class="th-300" scope="col">Paciente</th>
                             <th class="th-200" scope="col">CPF</th>
-                            <th class="th-200" scope="col">Nascimento</th>
+                            <th class="th-200" scope="col">Dt. Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-200" scope="col">Data Entrada</th>
-                            <th class="th-300" scope="col">Setor</th>
+                            <th class="th-200" scope="col">Dt. Entrada</th>
+                            <th class="th-200" scope="col">Setor</th>
+                            <th class="th-200" scope="col">Dt. Arquivo</th>
                             <th scope="col">Arquivo</th>
                             <th scope="col">eDok</th>
                         </tr>
@@ -112,6 +113,8 @@
                                     {{ file.date_in|date:"d/m/Y" }} {% else %} - {% endif %}</td>
                                 <td>{% if file.sector %}
                                     {{ file.sector }} {% else %} - {% endif %}</td>
+                            <td>{% if file.date_file %}
+                                    {{ file.date_file|date:"d/m/Y" }} {% else %} - {% endif %}</td>
                                 <th scope="row" style="color: black">
                                     <a class="glyphicon-link" href="{{ file.url }}" target="_blank">
                                         <svg width="2em" height="1.5em" viewBox="0 0 16 16"
@@ -155,11 +158,12 @@
                         <tr class="content-scrolable">
                             <th class="th-300" scope="col">Paciente</th>
                             <th class="th-200" scope="col">CPF</th>
-                            <th class="th-200" scope="col">Nascimento</th>
+                            <th class="th-200" scope="col">Dt. Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-200" scope="col">Data Entrada</th>
-                            <th class="th-300" scope="col">Setor</th>
+                            <th class="th-200" scope="col">Dt. Entrada</th>
+                            <th class="th-200" scope="col">Setor</th>
+                            <th class="th-200" scope="col">Dt. Arquivo</th>
                             <th scope="col">Arquivo</th>
                             <th scope="col">eDok</th>
                         </tr>
