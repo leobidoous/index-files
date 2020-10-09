@@ -46,43 +46,46 @@ def pdf_to_file():
 
         text = text.split('EVOLUÇÃO')[0].split('\n')
 
-        indexed_file_dict = {
-            'filename': path.name,
-            'name': text[7],
-            'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
-            'sex': text[9],
-            'nr_cpf': text[10],
-            'sector': text[32],
-            'attendance_number': text[40],
-            'medical_records_number': text[41],
-            'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
-            'date_file': datetime.datetime.strptime(text[12], '%d/%m/%Y'),
-            'uti': text[33],
-            'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
-        }
-
-        if text[43]:
-            location, created = Location.objects.get_or_create(location=text[43])
-            indexed_file_dict['location'] = location.pk
-        if text[31]:
-            health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[31])
-            indexed_file_dict['health_insurance'] = health_insurance.pk
-
         try:
-            indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
-            indexed_file_serializer.is_valid(raise_exception=True)
-            indexed_file_serializer.save()
-        except Exception as e:
-            print(e)
-            pass
+            indexed_file_dict = {
+                'filename': path.name,
+                'name': text[7],
+                'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
+                'sex': text[9],
+                'nr_cpf': text[10],
+                'sector': text[32],
+                'attendance_number': text[40],
+                'medical_records_number': text[41],
+                'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
+                'date_file': datetime.datetime.strptime(text[12], '%d/%m/%Y'),
+                'uti': text[33],
+                'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
+            }
 
-        converter.close()
-        file_handle.close()
+            if text[43]:
+                location, created = Location.objects.get_or_create(location=text[43])
+                indexed_file_dict['location'] = location.pk
+            if text[31]:
+                health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[31])
+                indexed_file_dict['health_insurance'] = health_insurance.pk
 
-        # end = time.time() - start
-        # print('Tempo parcial: {} seconds'.format(end))
+            try:
+                indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
+                indexed_file_serializer.is_valid(raise_exception=True)
+                indexed_file_serializer.save()
+            except Exception as e:
+                print(e)
+                pass
 
-        yield Response(indexed_file_dict)
+            converter.close()
+            file_handle.close()
+
+            # end = time.time() - start
+            # print('Tempo parcial: {} seconds'.format(end))
+
+            yield Response(indexed_file_dict)
+        except ValueError:
+            yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
 
 
 class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
