@@ -5,7 +5,9 @@ from django.core import validators
 import uuid
 import re
 from core.api.v1.models.indexed_file import Location, HealthInsurance
-
+from django.contrib.auth.hashers import (
+    check_password, is_password_usable, make_password, identify_hasher,
+)
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, verbose_name=_('uuid'), default=uuid.uuid4,
@@ -21,7 +23,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
             )
         ], help_text='Um nome curto que será usado para identificá-lo de forma única na plataforma'
     )
-    nickname = models.CharField("Com quer ser chamado", max_length=255, unique=True)
+    nickname = models.CharField("Com quer ser chamado", max_length=255, null=True)
     email = models.EmailField('E-mail', unique=True, null=True, blank=True)
     password = models.CharField("Senha", max_length=255)
     is_staff = models.BooleanField('Time', default=False)
@@ -48,12 +50,16 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return str(self)
 
-    def datepublished(self):
+    def date_published(self):
         return self.date_joined.strftime('%B %d %Y')
 
     def get_short_name(self):
         return str(self).split(" ")[0]
     
     def save(self, *args, **kwargs):
-        self.set_password(self.password)
+        try:
+            identify_hasher(self.password)
+        except ValueError:
+            self.set_password(self.password)
         super(UserModel, self).save(*args, **kwargs)
+
