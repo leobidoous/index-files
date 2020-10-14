@@ -53,21 +53,21 @@ def pdf_to_file():
                 'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
                 'sex': text[9],
                 'nr_cpf': text[10],
-                'sector': text[32],
-                'medical_records_number': text[41],
-                'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
-                'date_file': datetime.datetime.strptime(text[12], '%d/%m/%Y'),
-                'uti': text[33],
+                'sector': text[43],
+                'medical_records_number': text[52],
+                'date_in': datetime.datetime.strptime(text[42], '%d/%m/%Y %H:%M:%S'),
+                'date_file': datetime.datetime.strptime(text[40], '%d/%m/%Y'),
+                'uti': text[44],
                 'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
             }
 
-            if text[40]:
-                indexed_file_dict['attendance_number'] = text[40],
-            if text[43]:
-                location, created = Location.objects.get_or_create(location=text[43])
+            if text[51]:
+                indexed_file_dict['attendance_number'] = text[51],
+            if text[54]:
+                location, created = Location.objects.get_or_create(location=text[54])
                 indexed_file_dict['location'] = location.pk
-            if text[31]:
-                health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[31])
+            if text[42]:
+                health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[42])
                 indexed_file_dict['health_insurance'] = health_insurance.pk
 
             try:
