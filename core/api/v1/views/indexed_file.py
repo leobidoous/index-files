@@ -54,7 +54,6 @@ def pdf_to_file():
                 'sex': text[9],
                 'nr_cpf': text[10],
                 'sector': text[32],
-                'attendance_number': text[40],
                 'medical_records_number': text[41],
                 'date_in': datetime.datetime.strptime(text[30], '%d/%m/%Y %H:%M:%S'),
                 'date_file': datetime.datetime.strptime(text[12], '%d/%m/%Y'),
@@ -62,6 +61,8 @@ def pdf_to_file():
                 'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
             }
 
+            if text[40]:
+                indexed_file_dict['attendance_number'] = text[40],
             if text[43]:
                 location, created = Location.objects.get_or_create(location=text[43])
                 indexed_file_dict['location'] = location.pk
@@ -84,7 +85,7 @@ def pdf_to_file():
             # print('Tempo parcial: {} seconds'.format(end))
 
             yield Response(indexed_file_dict)
-        except ValueError:
+        except Exception:
             yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
 
 
