@@ -85,8 +85,10 @@ def pdf_to_file():
             # print('Tempo parcial: {} seconds'.format(end))
 
             yield Response(indexed_file_dict)
-        except Exception:
-            yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
+        except Exception as e:
+            print(e)
+            pass
+            # yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
 
 
 class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
