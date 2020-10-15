@@ -52,12 +52,12 @@
 
     <div class="collapse navbar-collapse" style="margin-left: 10px" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            {% if user.is_authenticated and user.is_superuser %}
-                <li class="nav-item active">
-                    <a class="btn btn-outline-info form-navbar" target="_blank" href="/admin">ADM<span
-                            class="sr-only">(current)</span></a>
-                </li>
-            {% endif %}
+{#            {% if user.is_authenticated and user.is_superuser %}#}
+{#                <li class="nav-item active">#}
+{#                    <a class="btn btn-outline-info form-navbar" target="_blank" href="/admin">ADM<span#}
+{#                            class="sr-only">(current)</span></a>#}
+{#                </li>#}
+{#            {% endif %}#}
         </ul>
         <form class="form-inline my-2 my-lg-0">
             {% if user.is_authenticated %}
