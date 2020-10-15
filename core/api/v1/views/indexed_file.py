@@ -88,9 +88,10 @@ def pdf_to_file():
 
             yield Response(indexed_file_dict)
         except Exception as e:
-            # print(e)
-            # pass
-            yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
+            print(e)
+            print('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
+            pass
+            # yield Response('Impossível registrar o arquivo: ' + path.name + ' || Estrutura inválida...')
 
 
 class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
