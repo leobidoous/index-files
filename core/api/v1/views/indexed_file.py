@@ -39,35 +39,37 @@ def pdf_to_file():
         fh = open(str(path), 'rb')
         for page in PDFPage.get_pages(fh, maxpages=1):
             interpreter.process_page(page)
-        shutil.move(fh.name, settings.PATH_MOVE_FILES_TO+path.stem+'.pdf')
+        shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + path.stem + '.pdf')
         fh.close()
 
         text = file_handle.getvalue()
 
-        text = text.split('EVOLUÇÃO')[0].split('\n')
+        text = text.split('Profissional')[0].split('\n')
 
         try:
             indexed_file_dict = {
                 'filename': path.name,
-                'name': text[7],
-                'birth': datetime.datetime.strptime(text[8], '%d/%m/%Y'),
-                'sex': text[9],
-                'nr_cpf': text[10],
-                'sector': text[43],
-                'medical_records_number': text[52],
-                'date_in': datetime.datetime.strptime(text[42], '%d/%m/%Y %H:%M:%S'),
-                'date_file': datetime.datetime.strptime(text[40], '%d/%m/%Y'),
-                'uti': text[44],
-                'url': 'https://'+settings.SITE_NAME+settings.MEDIA_URL+path.stem+'.pdf'
+                'name': text[55],
+                'birth': datetime.datetime.strptime(text[56], '%d/%m/%Y'),
+                'sex': text[57],
+                'nr_cpf': text[58],
+                'sector': text[18],
+                'medical_records_number': text[27],
+                'date_in': datetime.datetime.strptime(text[16], '%d/%m/%Y %H:%M:%S'),
+                'date_file': datetime.datetime.strptime(text[60], '%d/%m/%Y'),
+                'uti': text[19],
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + path.stem + '.pdf'
             }
 
-            if text[51]:
-                indexed_file_dict['attendance_number'] = text[51],
-            if text[54]:
-                location, created = Location.objects.get_or_create(location=text[54])
+            if text[26]:
+                indexed_file_dict['attendance_number'] = str(text[26])
+                if type(indexed_file_dict['attendance_number']) == type(tuple()):
+                    indexed_file_dict['attendance_number'] = indexed_file_dict['attendance_number'][0]
+            if text[29]:
+                location, created = Location.objects.get_or_create(location=text[29])
                 indexed_file_dict['location'] = location.pk
-            if text[42]:
-                health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[42])
+            if text[17]:
+                health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[17])
                 indexed_file_dict['health_insurance'] = health_insurance.pk
 
             try:

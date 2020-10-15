@@ -88,10 +88,10 @@
                         <tr class="content-scrolable">
                             <th class="th-300" scope="col">Paciente</th>
                             <th class="th-200" scope="col">CPF</th>
-                            <th class="th-200" scope="col">Dt. Nascimento</th>
                             <th class="th-200" scope="col">Nº Prontuário</th>
                             <th class="th-200" scope="col">Nº Atendimento</th>
                             <th class="th-200" scope="col">Dt. Entrada</th>
+                            <th class="th-200" scope="col">UTI</th>
                             <th class="th-200" scope="col">Setor</th>
                             <th class="th-200" scope="col">Dt. Arquivo</th>
                             <th scope="col">Arquivo</th>
@@ -104,13 +104,14 @@
 
                                 <td>{% if file.name %} {{ file.name }} {% else %} - {% endif %}</td>
                                 <td>{% if file.nr_cpf %} {{ file.nr_cpf }} {% else %} - {% endif %}</td>
-                                <td>{% if file.birth %} {{ file.birth|date:"d/m/Y" }} {% else %} - {% endif %}</td>
+{#                                <td>{% if file.birth %} {{ file.birth|date:"d/m/Y" }} {% else %} - {% endif %}</td>#}
                                 <td>{% if file.medical_records_number %} {{ file.medical_records_number }} {% else %}
                                     - {% endif %}</td>
                                 <td>{% if file.attendance_number %} {{ file.attendance_number }} {% else %}
                                     - {% endif %}</td>
                                 <td>{% if file.date_in %}
                                     {{ file.date_in|date:"d/m/Y" }} {% else %} - {% endif %}</td>
+                                <td>{% if file.uti %} {{ file.uti }} {% else %} - {% endif %}</td>
                                 <td>{% if file.sector %}
                                     {{ file.sector }} {% else %} - {% endif %}</td>
                             <td>{% if file.date_file %}
