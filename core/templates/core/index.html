@@ -216,7 +216,7 @@
             {#            {% endif %}#}
 
             {% if page_obj.paginator.num_pages > 1 %}
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" class="content-scrolable">
                     <ul class="pagination justify-content-center">
                         {% if page_obj.paginator.num_pages != 1 %}
                             <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
