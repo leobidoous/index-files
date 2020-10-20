@@ -51,7 +51,7 @@ class HomeView(ListView, LoginRequiredMixin):
 
         if not user.is_anonymous:
             if user.is_superuser:
-                qs = IndexedFileModel.objects.all().order_by("-date_created")
+                qs = IndexedFileModel.objects.all().order_by("-date_file")
             else:
                 locations_user = user.locations.all()
                 health_insurance_user = user.health_insurances.all()
@@ -64,7 +64,7 @@ class HomeView(ListView, LoginRequiredMixin):
                     health_insurance.append(obj.pk)
 
                 qs = IndexedFileModel.objects.filter(location__id__in=locations).filter(
-                    health_insurance__id__in=health_insurance).all().order_by("-date_created")
+                    health_insurance__id__in=health_insurance).all().order_by("-date_file")
     
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])

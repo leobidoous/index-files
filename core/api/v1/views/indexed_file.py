@@ -95,7 +95,7 @@ def pdf_to_file():
 
 
 class IndexedFileViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin):
-    queryset = IndexedFileModel.objects.all().order_by('-medical_records_number')
+    queryset = IndexedFileModel.objects.all().order_by('-date_file')
     serializer_class = IndexedFileSerializer
     pagination_class = DefaultResultsSetPagination
     permission_classes = []
