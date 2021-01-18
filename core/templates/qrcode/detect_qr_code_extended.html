@@ -1,0 +1,28 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="content-inside text">
+  <div class="content-filters">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="myfile">
+      <button type="submit">Upload</button>
+    </form>
+
+    {% if uploaded_file_url %}
+    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    {% endif %}
+
+    {% if decoded_text is not None %}
+    <div class="inner">
+      <p>Seu QR Code é: {{decoded_text}}</p>
+      {% if image %}
+      <img src="data:image/png;base64, {{image}}" alt="QR Code" width="200" height="220" />
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock%}

@@ -1,7 +1,7 @@
-"""indexes URL Configuration
+"""QRCodeProject URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
+    https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -15,18 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from indexes import settings
-from django.conf.urls.static import static
+from . import views
 
-
+app_name = 'qrcode'
 urlpatterns = [
-    path('admin/', admin.site.urls, name="admin"),
-    path('', include('core.urls', namespace="core")),
-    path('', include('edok.urls', namespace='edok')),
-    path('qrcode/', include('qrcode.urls', namespace='qrcode'))
+    path('', views.QrCodeView.as_view(), name='QR Code View'),
+    path("api/", views.QrCodeAPI.as_view(), name='Qr Code JSON')
+
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
