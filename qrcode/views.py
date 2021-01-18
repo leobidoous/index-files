@@ -30,27 +30,9 @@ class QrCodeView(APIView):
     def post(request):
         if request.FILES['myfile']:
             myfile = request.FILES['myfile']
-            # fs = FileSystemStorage()
-
-            # Salvou em '/media/' o arquivo enviado por upload (com o nome .name e o arquivo myfile)
-            # myfile.name = myfile.name.replace(" ", "_")
-            # filename = fs.save(myfile.name, myfile)
-
-            # Obtendo o link para o arquivo em /media/
-            # uploaded_file_url = fs.url(filename)
-
-            # Retornando para a view
-            # print(fs.path(name=filename))
-            # print(fs.url(name=filename))
-            # qr_code = ManageQrCode(pdf_path=fs.path(name=filename))
             qr_code = ManageQrCode(myfile.file)
-
-            # self.cropped_bytes_pdf = io.BytesIO()
-
             decoded_text = qr_code.get_decoded_text()
             payload = {}
-            # payload = {'uploaded_file_url': uploaded_file_url}
-            # print("Tempo total: " + "{:.2f}".format(qr_code.total_time))
             if decoded_text is not None:
                 payload['decoded_text'] = decoded_text
                 payload['image'] = qr_code.qr_code_image64.decode('utf-8')
