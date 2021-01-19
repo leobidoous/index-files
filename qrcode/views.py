@@ -1,20 +1,12 @@
-import base64
-import os
 
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
-# Rest import
 from rest_framework import status
-from rest_framework.renderers import TemplateHTMLRenderer, JSONOpenAPIRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import FileUploadParser
 
 # For managing qrcode
 from .manage_qr_code import ManageQrCode
-
-from base64 import b64encode, b64decode
-# Create your views here.
 
 
 class QrCodeView(APIView):
