@@ -20,6 +20,4 @@ from . import views
 app_name = 'qrcode'
 urlpatterns = [
     path('', views.QrCodeView.as_view(), name='QR Code View'),
-    path("api/", views.QrCodeAPI.as_view(), name='Qr Code JSON')
-
 ]
