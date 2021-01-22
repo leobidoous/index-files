@@ -8,8 +8,8 @@ class Location(models.Model):
         return str(self.location)
 
 
-class Sectors(models.Model):
-    sector_name = models.CharField('Setor', max_length=255, unique=True)
+class Sector(models.Model):
+    sector_name = models.CharField('Setor', max_length=255)
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, related_name="sectors")
 
     def __str__(self):
