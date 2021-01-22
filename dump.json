@@ -1,0 +1,465 @@
+[
+   {
+      "model":"core.location",
+      "pk":1,
+      "fields":{
+         "location":"Hospital de Neurologia Santa Monica"
+      }
+   },
+   {
+      "model":"core.location",
+      "pk":2,
+      "fields":{
+         "location":"IMATI CUIABA"
+      }
+   },
+   {
+      "model":"core.location",
+      "pk":3,
+      "fields":{
+         "location":"Intensicare - IOP"
+      }
+   },
+   {
+      "model":"core.healthinsurance",
+      "pk":1,
+      "fields":{
+         "health_insurance":"Ipasgo - GO Especial"
+      }
+   },
+   {
+      "model":"core.healthinsurance",
+      "pk":2,
+      "fields":{
+         "health_insurance":"SES - Santa Casa UTI PED"
+      }
+   },
+   {
+      "model":"core.healthinsurance",
+      "pk":3,
+      "fields":{
+         "health_insurance":"SUS - Palmas UTI"
+      }
+   },
+   {
+      "model":"core.healthinsurance",
+      "pk":4,
+      "fields":{
+         "health_insurance":"SES - Santa Casa UTI NEO"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":115,
+      "fields":{
+         "name":"Antônio Gonçalves de Araújo",
+         "filename":"09092020_102041_117390_AntônioGonçalvesdeAraújo_183819.pdf",
+         "nr_cpf":"05972965100",
+         "birth":"1935-07-24T03:00:00Z",
+         "medical_records_number":"81296",
+         "date_in":"2020-09-01T01:30:00Z",
+         "date_file":"2020-10-08T03:00:00Z",
+         "sex":"Masculino",
+         "health_insurance":3,
+         "sector":"UTI A - COVID IOP",
+         "attendance_number":"183819",
+         "uti":"Leito 01",
+         "location":3,
+         "url":"https://127.0.0.1:8000/media/09092020_102041_117390_AntônioGonçalvesdeAraújo_183819.pdf",
+         "date_created":"2020-10-15T18:59:13.833Z",
+         "last_update":"2020-10-15T18:59:13.833Z"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":116,
+      "fields":{
+         "name":"Lorrany Carvalho Franca",
+         "filename":"30082020_190023_120838_LorranyCarvalhoFranca_192844.pdf",
+         "nr_cpf":"- - -",
+         "birth":"2018-07-01T03:00:00Z",
+         "medical_records_number":"120360",
+         "date_in":"2020-09-27T01:19:57Z",
+         "date_file":"2020-09-29T03:00:00Z",
+         "sex":"Feminino",
+         "health_insurance":2,
+         "sector":"UTI PED - Cuiaba",
+         "attendance_number":"192844",
+         "uti":"Leito 04",
+         "location":2,
+         "url":"https://127.0.0.1:8000/media/30082020_190023_120838_LorranyCarvalhoFranca_192844.pdf",
+         "date_created":"2020-10-15T18:59:19.058Z",
+         "last_update":"2020-10-15T18:59:19.058Z"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":117,
+      "fields":{
+         "name":"Davi Leandro Torres Araujo",
+         "filename":"08092020_042046_120403_DaviLeandroTorresAraujo_191689.pdf",
+         "nr_cpf":"- - -",
+         "birth":"2020-06-23T03:00:00Z",
+         "medical_records_number":"119985",
+         "date_in":"2020-09-23T19:05:31Z",
+         "date_file":"2020-10-07T03:00:00Z",
+         "sex":"Masculino",
+         "health_insurance":2,
+         "sector":"UTI PED - Cuiaba",
+         "attendance_number":"191689",
+         "uti":"Leito 06",
+         "location":2,
+         "url":"https://127.0.0.1:8000/media/08092020_042046_120403_DaviLeandroTorresAraujo_191689.pdf",
+         "date_created":"2020-10-15T18:59:22.069Z",
+         "last_update":"2020-10-15T18:59:22.069Z"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":118,
+      "fields":{
+         "name":"Aylla Kauanny Domingos Ribeiro",
+         "filename":"10092020_002041_99401_AyllaKauannyDomingosRibeiro_195980.pdf",
+         "nr_cpf":"- - -",
+         "birth":"2019-02-06T02:00:00Z",
+         "medical_records_number":"65648",
+         "date_in":"2020-10-05T21:24:15Z",
+         "date_file":"2020-10-09T03:00:00Z",
+         "sex":"Feminino",
+         "health_insurance":2,
+         "sector":"UTI PED - Cuiaba",
+         "attendance_number":"195980",
+         "uti":"Leito 03",
+         "location":2,
+         "url":"https://127.0.0.1:8000/media/10092020_002041_99401_AyllaKauannyDomingosRibeiro_195980.pdf",
+         "date_created":"2020-10-15T18:59:23.483Z",
+         "last_update":"2020-10-15T18:59:23.483Z"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":119,
+      "fields":{
+         "name":"Sophia Vitoria Costa da Silva",
+         "filename":"10092020_162041_121191_SophiaVitoriaCostadaSilva_193882.pdf",
+         "nr_cpf":"- - -",
+         "birth":"2019-07-26T03:00:00Z",
+         "medical_records_number":"120682",
+         "date_in":"2020-09-29T16:50:00Z",
+         "date_file":"2020-10-09T03:00:00Z",
+         "sex":"Feminino",
+         "health_insurance":2,
+         "sector":"UTI PED - Cuiaba",
+         "attendance_number":"193882",
+         "uti":"Leito 08",
+         "location":2,
+         "url":"https://127.0.0.1:8000/media/10092020_162041_121191_SophiaVitoriaCostadaSilva_193882.pdf",
+         "date_created":"2020-10-15T18:59:25.963Z",
+         "last_update":"2020-10-15T18:59:25.963Z"
+      }
+   },
+   {
+      "model":"core.indexedfilemodel",
+      "pk":120,
+      "fields":{
+         "name":"Miguel Willian Rondon Luverde",
+         "filename":"08092020_062041_121935_MiguelWillianRondonLuverde_196022.pdf",
+         "nr_cpf":"- - -",
+         "birth":"2020-09-28T03:00:00Z",
+         "medical_records_number":"121306",
+         "date_in":"2020-10-06T05:45:06Z",
+         "date_file":"2020-10-07T03:00:00Z",
+         "sex":"Masculino",
+         "health_insurance":4,
+         "sector":"UTI NEO - Cuiaba",
+         "attendance_number":"196022",
+         "uti":"Leito 02",
+         "location":2,
+         "url":"https://127.0.0.1:8000/media/08092020_062041_121935_MiguelWillianRondonLuverde_196022.pdf",
+         "date_created":"2020-10-15T18:59:26.259Z",
+         "last_update":"2020-10-15T18:59:26.259Z"
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"14303945-aad9-4114-8c83-3aa77a824cc2",
+      "fields":{
+         "last_login":"2020-10-09T14:38:21.952Z",
+         "username":"god11",
+         "nickname":"God 11",
+         "email":"god11@gmail.com",
+         "password":"pbkdf2_sha256$216000$ZvmlJAigo6mF$Ev6FBEyY29WGRFNC6qGqjesO1RJ+rEB4Lqx0WzQ+ctI=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:36:43.898Z",
+         "last_update":"2020-10-09T14:38:08.031Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"542c2198-561c-4382-a8ff-eb9f1900ef16",
+      "fields":{
+         "last_login":null,
+         "username":"god",
+         "nickname":"God",
+         "email":null,
+         "password":"pbkdf2_sha256$216000$07rCAMUJHQoT$kgm5hDz5kmQL3oXN7irnwC88OeY7fduExyaGlKmwhTU=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:13:43.850Z",
+         "last_update":"2020-10-09T14:22:34.531Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"74df66a1-e441-4867-ad74-307b26b6c6e1",
+      "fields":{
+         "last_login":"2020-10-09T14:01:07.253Z",
+         "username":"teste",
+         "nickname":"Dr. teste",
+         "email":null,
+         "password":"pbkdf2_sha256$216000$0jZkXK2vuuUg$ratFL0/VGh8VJ3UqUpLYtvgvbblBf07RkKO034K4eZE=",
+         "is_staff":false,
+         "is_active":true,
+         "is_superuser":false,
+         "date_joined":"2020-10-09T13:56:26.743Z",
+         "last_update":"2020-10-09T14:00:46.434Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+            1
+         ],
+         "health_insurances":[
+            1
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"758dd19e-255c-4b42-a05a-18750be41e3e",
+      "fields":{
+         "last_login":null,
+         "username":"god20",
+         "nickname":null,
+         "email":"god20@gmail.com",
+         "password":"pbkdf2_sha256$216000$GMgXjmDFgdQJ$vmHiRCMjamoQjp920rlKsNw3TeQSkgIL2RzoDl1uxDY=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:49:22.890Z",
+         "last_update":"2020-10-09T14:49:22.890Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"856a0730-3c8d-44de-8ac1-ee21abcf2a65",
+      "fields":{
+         "last_login":null,
+         "username":"god10",
+         "nickname":null,
+         "email":"god10@gmail.com",
+         "password":"pbkdf2_sha256$216000$T6wHBHEOptjW$VfXZ2NaXLW8rdd1/0w2Pl9cStpQ/l6cbqVvdTCARA34=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:36:01.950Z",
+         "last_update":"2020-10-09T14:36:01.950Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"a508d617-fcb7-4689-a106-c607fc3c177d",
+      "fields":{
+         "last_login":null,
+         "username":"god2",
+         "nickname":"",
+         "email":"",
+         "password":"pbkdf2_sha256$216000$tN82hfEULhFK$wcJKb1EljYhUpoi+Y4QAiJbqe5Mnv7Mc3o0+z1/B4Gg=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:22:46.681Z",
+         "last_update":"2020-10-09T14:22:46.681Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"c31e7bc6-7fb2-4a46-abb4-36017f5a1a19",
+      "fields":{
+         "last_login":"2020-10-09T15:20:39.386Z",
+         "username":"god22",
+         "nickname":null,
+         "email":"god22@gmail.com",
+         "password":"pbkdf2_sha256$216000$MsmCdXUgnymc$pCxwDer8xyO+QTfX9NvSzzhlqjlzcfOXGukCcRXYq0Y=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T15:20:30.859Z",
+         "last_update":"2020-10-09T15:20:30.859Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"d02954e8-0268-445c-8158-c62f1ec37852",
+      "fields":{
+         "last_login":null,
+         "username":"god12",
+         "nickname":null,
+         "email":"god12@gmail.com",
+         "password":"pbkdf2_sha256$216000$Ds8UeXx5gtZ7$tFRY9PZN5HRirf92pq/nZIFJPn9NVDYNBwLyL61G47o=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T14:39:06.810Z",
+         "last_update":"2020-10-09T14:39:06.810Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"d8f841a9-5754-4ca2-aaa5-f7b20e35ca9e",
+      "fields":{
+         "last_login":"2020-10-09T15:20:12.834Z",
+         "username":"god21",
+         "nickname":"god21",
+         "email":"god21@gmail.com",
+         "password":"pbkdf2_sha256$216000$HhbZ0yl1hEjW$Rnn6z1uil5vZAWh8XN1tMAJk7zYNTQJoXrWyhxo5Xvw=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-10-09T15:17:05.129Z",
+         "last_update":"2020-10-09T15:20:04.085Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   },
+   {
+      "model":"user.usermodel",
+      "pk":"e1c6e2f2-9fc8-43c9-b7f8-e6e4a0e56ed6",
+      "fields":{
+         "last_login":"2021-01-20T18:17:45Z",
+         "username":"hitallo",
+         "nickname":"Criador do universo",
+         "email":null,
+         "password":"pbkdf2_sha256$216000$iaoz289VZwfx$rJe+sW+ueOqmJqtHtNgxQi8gWbsiambW15bT3ggtTHU=",
+         "is_staff":true,
+         "is_active":true,
+         "is_superuser":true,
+         "date_joined":"2020-09-15T15:25:32.325Z",
+         "last_update":"2021-01-20T20:01:18.040Z",
+         "groups":[
+
+         ],
+         "user_permissions":[
+
+         ],
+         "locations":[
+            1,
+            2,
+            3
+         ],
+         "health_insurances":[
+
+         ]
+      }
+   }
+]
