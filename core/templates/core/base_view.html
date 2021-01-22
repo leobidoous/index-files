@@ -50,6 +50,13 @@
         </a>
     </button>
 
+    <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">
+        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"
+           href="{% url 'qrcode:QR Code View' %}">
+            <span>Detectar QR Code</span>
+        </a>
+    </button>
+
     <div class="collapse navbar-collapse" style="margin-left: 10px" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 {#            {% if user.is_authenticated and user.is_superuser %}#}

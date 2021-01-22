@@ -57,16 +57,20 @@ class HomeView(ListView, LoginRequiredMixin):
             else:
                 locations_user = user.locations.all()
                 health_insurance_user = user.health_insurances.all()
-    
+
+                lc_nr = self.request.GET.get('locations')
                 locations = []
-                for obj in locations_user:
-                    locations.append(obj.pk)
+                if lc_nr is None or int(lc_nr) == 0:
+                    for obj in locations_user:
+                        locations.append(obj.pk)
+                else:
+                    locations.append(int(lc_nr))
+
                 health_insurance = []
                 for obj in health_insurance_user:
                     health_insurance.append(obj.pk)
 
-                qs = IndexedFileModel.objects.filter(location__id__in=locations).filter(
-                    health_insurance__id__in=health_insurance).all().order_by("-date_file")
+                qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
     
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])

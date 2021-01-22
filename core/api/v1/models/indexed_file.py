@@ -8,6 +8,14 @@ class Location(models.Model):
         return str(self.location)
 
 
+class Sector(models.Model):
+    sector_name = models.CharField('Setor', max_length=255)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, related_name="sectors")
+
+    def __str__(self):
+        return str(self.sector_name)
+
+
 class HealthInsurance(models.Model):
     health_insurance = models.CharField('Nome do convênio', max_length=255, unique=True)
 

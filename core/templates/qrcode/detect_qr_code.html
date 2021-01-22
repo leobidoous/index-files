@@ -1,0 +1,24 @@
+{% extends "core/base_view.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="content-inside text text-center">
+  <div class="content-filters">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="myfile">
+      <button type="submit">Detect QR Code!</button>
+    </form>
+
+    {% if qr_code is not None %}
+    <div class="inner">
+      <p>Seu QR Code é: {{qr_code}}</p>
+      {% if qr_code_image %}
+      <img src="data:image/png;base64, {{qr_code_image}}" alt="QR Code" width="200" height="220" />
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock%}
