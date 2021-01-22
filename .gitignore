@@ -58,7 +58,8 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
-qrcode_fixture.json
+.qrcode_fixture.json
+requirements.txt
 
 # Flask stuff:
 instance/
