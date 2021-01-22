@@ -11,11 +11,11 @@
       <button type="submit">Detect QR Code!</button>
     </form>
 
-    {% if decoded_text is not None %}
+    {% if qr_code is not None %}
     <div class="inner">
-      <p>Seu QR Code é: {{decoded_text}}</p>
-      {% if image %}
-      <img src="data:image/png;base64, {{image}}" alt="QR Code" width="200" height="220" />
+      <p>Seu QR Code é: {{qr_code}}</p>
+      {% if qr_code_image %}
+      <img src="data:image/png;base64, {{qr_code_image}}" alt="QR Code" width="200" height="220" />
       {% endif %}
     </div>
     {% endif %}
