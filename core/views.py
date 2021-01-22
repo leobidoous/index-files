@@ -36,7 +36,8 @@ class HomeView(ListView, LoginRequiredMixin):
         url = 'https://intcare.edok.com.br/api/DocView.php?'
         url += 'k=' + settings.EDOK_API_KEY
         context['url'] = url
-        context['locations'] = self.request.user.locations.all()
+        if not self.request.user.is_anonymous:
+            context['locations'] = self.request.user.locations.all()
         return context
 
     def get_queryset(self, *args, **kwargs):
