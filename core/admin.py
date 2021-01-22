@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.api.v1.forms.indexed_file import IndexedFilerForm
-from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance
+from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance, Sector
 
 
 class IndexedFilerAdmin(admin.ModelAdmin):
@@ -19,6 +19,11 @@ class HealthInsuranceAdmin(admin.ModelAdmin):
     pass
 
 
+class SectorAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(IndexedFileModel, IndexedFilerAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(HealthInsurance, HealthInsuranceAdmin)
+admin.site.register(Sector, SectorAdmin)
