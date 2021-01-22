@@ -7,6 +7,16 @@
                 <form method="get">
                     <fieldset>
                         <div>
+                            <form action="/action_page.php">
+                                <label for="cars"><h5><b>Selecione um Estabelecimento:</b></h5></label>
+                                <select name="locations" id="locations" class="btn btn-info">
+                                    {% for loc in locations %}
+                                        <option value="{{ loc.id }}">{{ loc.location }}</option>
+                                    {% endfor %}
+                                </select>
+                                <br><br>
+                            </form>
+
                             <h5><b>Procurar arquivos</b></h5>
                             <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
