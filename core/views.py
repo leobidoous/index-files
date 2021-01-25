@@ -37,7 +37,31 @@ class HomeView(ListView, LoginRequiredMixin):
         url += 'k=' + settings.EDOK_API_KEY
         context['url'] = url
         if not self.request.user.is_anonymous:
-            context['locations'] = self.request.user.locations.all()
+            context['locations'] = []
+            context['sectors'] = []
+            selected_location = 0
+            selected_sector = 0
+
+            if self.request.GET.get('locations'):
+                selected_location = self.request.GET.get('locations')
+                loc_temp = self.request.user.locations.all().filter(id=int(selected_location))
+                if loc_temp:
+                    context['locations'].append(loc_temp.get())
+                    selected_sector = self.request.GET.get('sectors')
+                    sec_temp = loc_temp.get().sectors.filter(pk=int(selected_sector))
+                    if sec_temp:
+                        context['sectors'].append(sec_temp.get())
+
+                    for sector in loc_temp.get().sectors.all():
+                        if sector.pk != int(selected_sector):
+                            context['sectors'].append(sector)
+                            
+            for loc in self.request.user.locations.exclude(id=int(selected_location)):
+                if loc.id != selected_location:
+                    context['locations'].append(loc)
+                    if int(selected_sector) == 0 and int(selected_location) == 0:
+                        for sector in loc.sectors.all():
+                            context['sectors'].append(sector)
         return context
 
     def get_queryset(self, *args, **kwargs):
@@ -56,6 +80,7 @@ class HomeView(ListView, LoginRequiredMixin):
                 qs = IndexedFileModel.objects.all().order_by("-date_file")
             else:
                 locations_user = user.locations.all()
+                sectors_user = user.locations.all()
                 health_insurance_user = user.health_insurances.all()
 
                 lc_nr = self.request.GET.get('locations')
@@ -66,12 +91,23 @@ class HomeView(ListView, LoginRequiredMixin):
                 else:
                     locations.append(int(lc_nr))
 
+                sector_nr = self.request.GET.get('sector')
+                sectors = []
+                sectors = locations_user.first().sectors.all()
+                '''
+                if lc_nr is None or int(sector_nr) == 0:
+                    for obj in sectors_user:
+                        sectors.append(obj.pk)
+                else:
+                    locations.append(int(lc_nr))
+                '''
+
                 health_insurance = []
                 for obj in health_insurance_user:
                     health_insurance.append(obj.pk)
 
                 qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
-    
+
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])
             if self.filters['birth']:
@@ -88,7 +124,7 @@ class HomeView(ListView, LoginRequiredMixin):
                 qs = qs.filter(nr_cpf__iexact=self.filters['nr_cpf'].replace('.', '').replace('-', ''))
             if self.filters['attendance_number']:
                 qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
-    
+
             return qs
         return super(HomeView, self).get_queryset()
 
