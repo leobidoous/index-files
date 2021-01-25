@@ -7,21 +7,30 @@
                 <form method="get">
                     <fieldset>
                         <div>
-                            <label for="locations"><h5><b>Selecione um Estabelecimento <h3>{{ request.GET.locations }}</h3> :</b></h5></label>
+                            <h5><b>Procurar arquivos</b></h5>
+                            <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
+                            <hr>
+
+                            <label for="cars"><h5><b>Estabelecimento:</b></h5></label>
                             <select name="locations" id="locations" class="btn btn-info">
 
                                 {% for loc in locations %}
                                     <option value="{{ loc.id }}"> {{ loc.location }} </option>
                                 {% endfor %}
-                                    <option value="0">Todas</option>
+                                <option value="0">Todas</option>
+                            </select>
+                            <label for="cars"><h5><b>Setor:</b></h5></label>
+                            <select name="sectors" id="sectors" class="btn btn-info">
+
+                                {% for sec in sectors %}
+                                    <option value="{{ sec.id }}"> {{ sec.sector }} </option>
+                                {% endfor %}
+                                <option value="0">Todos</option>
                             </select>
                             <br><br>
-
-                            <h5><b>Procurar arquivos</b></h5>
-                            <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
-                            <hr>
                         </div>
                         <div class="form-row">
+
                             <div class="col-md">
                                 <label for="name">Nome do Paciente</label>
                                 <input type="text" class="form-control"
@@ -35,13 +44,13 @@
                                        name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
                                        value="{{ filters.cpf }}" {% endif %} id="cpf">
                             </div>
-                            <div class="col-md">
-                                <label for="birth">Data de Nascimento do Paciente</label>
-                                <input type="date" class="form-control"
-                                       placeholder="Informe a data de nascimento do paciente"
-                                       name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}
-                                       id="birth">
-                            </div>
+                            {#                            <div class="col-md">#}
+                            {#                                <label for="birth">Data de Nascimento do Paciente</label>#}
+                            {#                                <input type="date" class="form-control"#}
+                            {#                                       placeholder="Informe a data de nascimento do paciente"#}
+                            {#                                       name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}#}
+                            {#                                       id="birth">#}
+                            {#                            </div>#}
                         </div>
 
                         <div class="form-row">
@@ -58,12 +67,12 @@
                                        name="attendance_number" {% if filters.attendance_number %}
                                        value="{{ filters.attendance_number }}" {% endif %} id="attendance_number">
                             </div>
-                            <div class="col-md">
-                                <label for="sector">Setor</label>
-                                <input type="text" class="form-control" placeholder="Informe o setor"
-                                       name="sector" {% if filters.sector %}
-                                       value="{{ filters.sector }}" {% endif %} id="sector">
-                            </div>
+                            {#                            <div class="col-md">#}
+                            {#                                <label for="sector">Setor</label>#}
+                            {#                                <input type="text" class="form-control" placeholder="Informe o setor"#}
+                            {#                                       name="sector" {% if filters.sector %}#}
+                            {#                                       value="{{ filters.sector }}" {% endif %} id="sector">#}
+                            {#                            </div>#}
                             <div class="col-md">
                                 <label for="birth">Data de Entrada do Paciente</label>
                                 <input type="date" class="form-control"
