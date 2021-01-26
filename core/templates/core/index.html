@@ -4,18 +4,19 @@
     {% if user.is_authenticated %}
         <div class="content-inside">
             <div class="content-filters">
-                <form method="get">
+                <form id="main-form" method="get">
                     <fieldset>
                         <div>
+
                             <h5><b>Procurar arquivos</b></h5>
                             <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
 
                             <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
-                            <select name="locations" id="locations" class="btn btn-info">
+                            <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
 
                                 {% if request.GET.locations == 0|slugify  or not request.GET.locations %}
-                                    <option value="0">Todas</option>
+                                    <option value="0">Todos</option>
                                 {% endif %}
 
                                 {% for loc in locations %}
@@ -23,12 +24,11 @@
                                 {% endfor %}
 
                                 {% if request.GET.locations and request.GET.locations != 0|slugify %}
-                                    <option value="0">Todas</option>
+                                    <option value="0">Todos</option>
                                 {% endif %}
-
                             </select>
-                            <label for="cars"><h5><b>Setor:</b></h5></label>
-                            <select name="sectors" id="sectors" class="btn btn-info">
+                            <label for="sectors"><h5><b>Setor:</b></h5></label>
+                            <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
                             {% if request.GET.sectors == 0|slugify  or not request.GET.sectors %}
                                     <option value="0">Todos</option>
                                 {% endif %}
@@ -36,7 +36,7 @@
                                 {% for sec in sectors %}
                                     <option value="{{ sec.pk }}"> {{ sec.sector_name }} </option>
                                 {% endfor %}
-                            {% if request.GET.sectors and request.GET.sectors != 0|slugify %}
+                                {% if request.GET.sectors and request.GET.sectors != 0|slugify %}
                                     <option value="0">Todos</option>
                                 {% endif %}
                             </select>
@@ -287,8 +287,21 @@
 
 
         </div>
+        
 
     {% else %}
         <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
     {% endif %}
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <script>
+        function resetSector(){
+            $('#sectors').val("0");
+            $('#main-form').submit()
+        }
+    </script>
+    <script>
+        function searchBySector(){
+            $('#main-form').submit()
+        }
+    </script>
 {% endblock %}

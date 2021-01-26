@@ -34,7 +34,8 @@ class IndexedFileModel(models.Model):
     date_file = models.DateTimeField('Data do arquivo', null=True, blank=True)
     sex = models.CharField('Sexo', max_length=20, blank=True, null=True)
     health_insurance = models.ForeignKey(HealthInsurance, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')
-    sector = models.CharField('Setor', max_length=255, null=True, blank=True)
+    # sector = models.CharField('Setor', max_length=255, null=True, blank=True)
+    sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING, related_name='indexfiles')
     attendance_number = models.CharField('Número do atendimento', max_length=255, null=True, blank=True)
     uti = models.CharField('Número do leito', max_length=255, null=True, blank=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')
@@ -58,6 +59,11 @@ class IndexedFileModel(models.Model):
 
     def get_short_name(self):
         return str(self).split(" ")[0]
+
+    def save(self, *args, **kwargs):
+        if not self.location.sectors.filter(pk=self.sector.pk):
+            raise IndexError
+        super(IndexedFileModel, self).save(*args, **kwargs)
 
     # def save(self, *args, **kwargs):
     #     if self.location:
