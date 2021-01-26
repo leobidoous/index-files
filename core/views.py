@@ -39,12 +39,24 @@ class HomeView(ListView, LoginRequiredMixin):
         if not self.request.user.is_anonymous:
             context['locations'] = []
             context['sectors'] = []
-            selected_location = 0
-            selected_sector = 0
+            if self.request.GET.get('locations') is None:
+                selected_location = 0
+
+            if self.request.GET.get('sectors') is None:
+                selected_sector = 0
+            else:
+                selected_sector = int(self.request.GET.get('sectors'))
 
             if self.request.GET.get('locations'):
                 selected_location = self.request.GET.get('locations')
                 loc_temp = self.request.user.locations.all().filter(id=int(selected_location))
+
+                if not loc_temp and selected_sector != 0:
+                    # Se entrar aqui, então não tem prioridade de exibição
+                    loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
+                elif selected_location != 0 and selected_sector != 0:
+                    context['locations'].append(loc_temp.get())
+
                 if loc_temp:
                     context['locations'].append(loc_temp.get())
                     selected_sector = self.request.GET.get('sectors')
@@ -55,7 +67,7 @@ class HomeView(ListView, LoginRequiredMixin):
                     for sector in loc_temp.get().sectors.all():
                         if sector.pk != int(selected_sector):
                             context['sectors'].append(sector)
-                            
+
             for loc in self.request.user.locations.exclude(id=int(selected_location)):
                 if loc.id != selected_location:
                     context['locations'].append(loc)
@@ -110,11 +122,9 @@ class HomeView(ListView, LoginRequiredMixin):
                 if sector_nr is None or sector_nr == 0:
                     qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
                 else:
-                    sector_name = locations_user.filter(id=int(lc_nr)).first().sectors.filter(id=sector_nr).get().sector_name
+                    sector_name = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get().sector_name
                     qs = IndexedFileModel.objects.filter(location__id__in=locations,
                                                          sector__iexact=sector_name).all().order_by("-date_file")
-
-
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])
             if self.filters['birth']:
