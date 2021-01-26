@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 from core.api.v1.forms.indexed_file import IndexedFilerForm
 from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance, Sector
@@ -9,6 +11,13 @@ class IndexedFilerAdmin(admin.ModelAdmin):
     fields = ['name', 'nr_cpf', 'sex', 'birth', 'medical_records_number', 'date_in', 'health_insurance', 'location',
               'sector',
               'attendance_number', 'uti', 'url']
+
+    def save_model(self, request, obj, form, change):
+        try:
+            super(IndexedFilerAdmin, self).save_model(request, obj, form, change)
+        except ValidationError:
+            messages.add_message(request, messages.ERROR, 'O usuário não foi salvo')
+        # super(IndexedFilerAdmin, self).save_model(request, obj, form, change)
 
 
 class LocationAdmin(admin.ModelAdmin):

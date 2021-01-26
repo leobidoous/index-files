@@ -91,7 +91,9 @@ class HomeView(ListView, LoginRequiredMixin):
                 else:
                     locations.append(int(lc_nr))
 
-                sector_nr = self.request.GET.get('sector')
+                sector_nr = self.request.GET.get('sectors')
+                if sector_nr is not None:
+                    sector_nr = int(sector_nr)
                 sectors = []
                 sectors = locations_user.first().sectors.all()
                 '''
@@ -105,8 +107,13 @@ class HomeView(ListView, LoginRequiredMixin):
                 health_insurance = []
                 for obj in health_insurance_user:
                     health_insurance.append(obj.pk)
+                if sector_nr is None or sector_nr == 0:
+                    qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
+                else:
+                    sector_name = locations_user.filter(id=int(lc_nr)).first().sectors.filter(id=sector_nr).get().sector_name
+                    qs = IndexedFileModel.objects.filter(location__id__in=locations,
+                                                         sector__iexact=sector_name).all().order_by("-date_file")
 
-                qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
 
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])
