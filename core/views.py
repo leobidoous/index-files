@@ -1,5 +1,4 @@
 import datetime
-import re
 
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -41,39 +40,45 @@ class HomeView(ListView, LoginRequiredMixin):
             context['sectors'] = []
             if self.request.GET.get('locations') is None:
                 selected_location = 0
+            else:
+                selected_location = int(self.request.GET.get('locations'))
 
             if self.request.GET.get('sectors') is None:
                 selected_sector = 0
             else:
                 selected_sector = int(self.request.GET.get('sectors'))
 
-            if self.request.GET.get('locations'):
-                selected_location = self.request.GET.get('locations')
-                loc_temp = self.request.user.locations.all().filter(id=int(selected_location))
+            new_location = selected_location
 
-                if not loc_temp and selected_sector != 0:
-                    # Se entrar aqui, então não tem prioridade de exibição
-                    loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
-                elif selected_location != 0 and selected_sector != 0:
-                    context['locations'].append(loc_temp.get())
+            # Tenta encontrar uma location com o id selecionado
+            loc_temp = self.request.user.locations.all().filter(id=selected_location)
 
-                if loc_temp:
-                    context['locations'].append(loc_temp.get())
-                    selected_sector = self.request.GET.get('sectors')
-                    sec_temp = loc_temp.get().sectors.filter(pk=int(selected_sector))
-                    if sec_temp:
-                        context['sectors'].append(sec_temp.get())
+            # Se não foi possível encontrar a localização e o setor foi selecionado,
+            # então vamos encontrar a location desse setor
+            if not loc_temp and selected_sector != 0:
+                # Se entrar aqui, então não tem prioridade de exibição (ou seja, Todos(location = 0) é o escolhido
+                loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
+                # Atribui uma nova id para a selecionada (para definir a prioridade do contexto)
+                new_location = loc_temp.get().id
 
-                    for sector in loc_temp.get().sectors.all():
-                        if sector.pk != int(selected_sector):
-                            context['sectors'].append(sector)
+            if loc_temp:
+                context['locations'].append(loc_temp.get())
+                sec_temp = loc_temp.get().sectors.filter(pk=selected_sector)
+                if sec_temp:
+                    context['sectors'].append(sec_temp.get())
 
-            for loc in self.request.user.locations.exclude(id=int(selected_location)):
-                if loc.id != selected_location:
-                    context['locations'].append(loc)
-                    if int(selected_sector) == 0 and int(selected_location) == 0:
-                        for sector in loc.sectors.all():
-                            context['sectors'].append(sector)
+                for sector in loc_temp.get().sectors.all():
+                    if sector.pk != selected_sector:
+                        context['sectors'].append(sector)
+
+            # Preenche as outras locations, sem ser a selecionada.
+            for loc in self.request.user.locations.exclude(id=new_location):
+                context['locations'].append(loc)
+                # Caso o setor seja 0 e a location seja 0,
+                # então iremos imprimir todos os setores disponíveis, de todas as localizações
+                if selected_location == 0:
+                    for sector in loc.sectors.all():
+                        context['sectors'].append(sector)
         return context
 
     def get_queryset(self, *args, **kwargs):
@@ -88,43 +93,33 @@ class HomeView(ListView, LoginRequiredMixin):
         self.filters['medical_records_number'] = self.request.GET.get('medical_records_number')
 
         if not user.is_anonymous:
-            if user.is_superuser:
-                qs = IndexedFileModel.objects.all().order_by("-date_file")
+            # if user.is_superuser:
+            #     qs = IndexedFileModel.objects.all().order_by("-date_file")
+            # else:
+            locations_user = user.locations.all()
+            health_insurance_user = user.health_insurances.all()
+
+            lc_nr = self.request.GET.get('locations')
+            locations = []
+            if lc_nr is None or int(lc_nr) == 0:
+                for obj in locations_user:
+                    locations.append(obj.pk)
             else:
-                locations_user = user.locations.all()
-                sectors_user = user.locations.all()
-                health_insurance_user = user.health_insurances.all()
+                locations.append(int(lc_nr))
 
-                lc_nr = self.request.GET.get('locations')
-                locations = []
-                if lc_nr is None or int(lc_nr) == 0:
-                    for obj in locations_user:
-                        locations.append(obj.pk)
-                else:
-                    locations.append(int(lc_nr))
+            sector_nr = self.request.GET.get('sectors')
+            if sector_nr is not None:
+                sector_nr = int(sector_nr)
 
-                sector_nr = self.request.GET.get('sectors')
-                if sector_nr is not None:
-                    sector_nr = int(sector_nr)
-                sectors = []
-                sectors = locations_user.first().sectors.all()
-                '''
-                if lc_nr is None or int(sector_nr) == 0:
-                    for obj in sectors_user:
-                        sectors.append(obj.pk)
-                else:
-                    locations.append(int(lc_nr))
-                '''
-
-                health_insurance = []
-                for obj in health_insurance_user:
-                    health_insurance.append(obj.pk)
-                if sector_nr is None or sector_nr == 0:
-                    qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
-                else:
-                    sector_name = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get().sector_name
-                    qs = IndexedFileModel.objects.filter(location__id__in=locations,
-                                                         sector__iexact=sector_name).all().order_by("-date_file")
+            health_insurance = []
+            for obj in health_insurance_user:
+                health_insurance.append(obj.pk)
+            if sector_nr is None or sector_nr == 0:
+                qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
+            else:
+                sector_name = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get().sector_name
+                qs = IndexedFileModel.objects.filter(location__id__in=locations,
+                                                     sector__iexact=sector_name).all().order_by("-date_file")
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])
             if self.filters['birth']:
