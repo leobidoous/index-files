@@ -15,7 +15,7 @@
                             <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
                             <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
 
-                                {% if request.GET.locations == 0|slugify  or not request.GET.locations %}
+                                {% if not request.GET.locations or all%}
                                     <option value="0">Todos</option>
                                 {% endif %}
 
@@ -23,20 +23,21 @@
                                         <option value="{{ loc.id }}"> {{ loc.location }} </option>
                                 {% endfor %}
 
-                                {% if request.GET.locations and request.GET.locations != 0|slugify %}
+                                {% if request.GET.locations and request.GET.locations != 0|slugify%}
                                     <option value="0">Todos</option>
                                 {% endif %}
                             </select>
+
                             <label for="sectors"><h5><b>Setor:</b></h5></label>
                             <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
-                            {% if request.GET.sectors == 0|slugify  or not request.GET.sectors %}
+                            {% if not request.GET.sectors or request.GET.sectors == 0|slugify%}
                                     <option value="0">Todos</option>
                                 {% endif %}
-
                                 {% for sec in sectors %}
                                     <option value="{{ sec.pk }}"> {{ sec.sector_name }} </option>
                                 {% endfor %}
-                                {% if request.GET.sectors and request.GET.sectors != 0|slugify %}
+
+                                {% if request.GET.sectors and request.GET.sectors != 0|slugify%}
                                     <option value="0">Todos</option>
                                 {% endif %}
                             </select>

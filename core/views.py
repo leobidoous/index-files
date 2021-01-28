@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from core.api.v1.models.indexed_file import IndexedFileModel
+from core.api.v1.models.indexed_file import IndexedFileModel, Location, Sector
 
 
 # Create your views here.
@@ -59,7 +59,11 @@ class HomeView(ListView, LoginRequiredMixin):
                 # Se entrar aqui, então não tem prioridade de exibição (ou seja, Todos(location = 0) é o escolhido
                 loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
                 # Atribui uma nova id para a selecionada (para definir a prioridade do contexto)
-                new_location = loc_temp.get().id
+                if loc_temp:
+                    new_location = loc_temp.get().id
+                else:
+                    selected_location = 0
+                    selected_sector = 0
 
             if loc_temp:
                 context['locations'].append(loc_temp.get())
@@ -70,6 +74,8 @@ class HomeView(ListView, LoginRequiredMixin):
                 for sector in loc_temp.get().sectors.all():
                     if sector.pk != selected_sector:
                         context['sectors'].append(sector)
+            else:
+                context['all'] = True
 
             # Preenche as outras locations, sem ser a selecionada.
             for loc in self.request.user.locations.exclude(id=new_location):
@@ -101,20 +107,32 @@ class HomeView(ListView, LoginRequiredMixin):
 
             lc_nr = self.request.GET.get('locations')
             locations = []
+
             if lc_nr is None or int(lc_nr) == 0:
+                lc_nr = 0
                 for obj in locations_user:
                     locations.append(obj.pk)
             else:
-                locations.append(int(lc_nr))
+                if lc_nr is not None and Location.objects.filter(id=int(lc_nr)):
+                    locations.append(int(lc_nr))
+                else:
+                    lc_nr = 0
+                    for obj in locations_user:
+                        locations.append(obj.pk)
 
             sector_nr = self.request.GET.get('sectors')
             if sector_nr is not None:
-                sector_nr = int(sector_nr)
+                if locations_user.filter(id__in=locations, sectors__id=sector_nr):
+                    sector_nr = int(sector_nr)
+                else:
+                    sector_nr = 0
+            else:
+                sector_nr = 0
 
             health_insurance = []
             for obj in health_insurance_user:
                 health_insurance.append(obj.pk)
-            if sector_nr is None or sector_nr == 0:
+            if sector_nr == 0:
                 qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
             else:
                 sector_name = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get().sector_name

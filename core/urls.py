@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/', include('core.api.urls', namespace="api")),
     path('logout/', LogoutView.as_view(next_page='core:home'), name='logout'),
     path('login/', LoginView.as_view(template_name='core/login.html'), name='login'),
+    path('nlogin/', LoginView.as_view(template_name='core/login/index.html'), name='login'),
     path('redefinir-senha', SolicitarRedefinirSenha.as_view(), name='reset_password'),
     path('redefinir-senha/done', RedefinirSenhaCompleto.as_view(), name='password_reset_done'),
     path('reset/<str:uidb64>/<str:token>/', RedefinirSenha.as_view(), name='password_reset_confirm'),
