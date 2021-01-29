@@ -29,12 +29,30 @@ a {
 h2 {
   font-size: 20px; }
 
-.half, .half .container > .row {
-  height: 100vh; }
+@media (max-width: 660px){
+  .screen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .son-image{
+    height: 30%;
+  }
+}
 
-@media (max-width: 991.98px) {
-  .half .bg {
-    height: 500px; } }
+@media (min-width: 660px) {
+  .screen{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .son-image{
+    width: 30%;
+  }
+
+}
 
 /*.half .contents, .half .bg {*/
 /*  width: 50%; }*/
