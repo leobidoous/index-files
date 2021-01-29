@@ -1,6 +1,12 @@
 body {
   font-family: "Roboto", sans-serif;
-  background-color: #fff; }
+  background-color: #fff;
+  height: 100%;
+}
+
+html{
+  height: 100%;
+}
 
 p {
   color: #b3b3b3;
