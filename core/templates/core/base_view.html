@@ -38,11 +38,6 @@
             <span>Procurar Arquivos</span>
         </a>
     </button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
     <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">
         <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"
            href="{% url 'edok:buscar_documento' %}">
@@ -55,6 +50,11 @@
            href="{% url 'qrcode:QR Code View' %}">
             <span>Detectar QR Code</span>
         </a>
+    </button>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" style="margin-left: 10px" id="navbarSupportedContent">
@@ -87,7 +87,7 @@
 </div>
 
 <!-- Footer -->
-<footer id="footer">
+<footer style="bottom: 0; left: 0; right: 0;" id="footer">
     <div class="container">
         <div class="row">
             <div class="col-md-4 copyright">

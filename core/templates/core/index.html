@@ -116,17 +116,17 @@
 
             {% if files %}
                 <div class="content-scrolable">
-                    <table id ="index-table" class="table table-hover table-light ">
+                    <table id ="index-table" class="table table-hover table-light">
                         <thead class="thead-dark">
                         <tr class="content-scrolable">
-                            <th class="th-300" scope="col">Paciente <button id="invert-1" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">CPF <button  id="invert-2" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">Nº Prontuário <button id="invert-3" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">Nº Atendimento <button id="invert-4" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">Dt. Entrada <button id="invert-5" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">UTI <button id="invert-6" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">Setor <button id="invert-7" class="button-table" onclick="invertButton(this)">–</button></th>
-                            <th class="th-200" scope="col">Dt. Arquivo <button id="invert-8" class="button-table" onclick="invertButton(this)">–</button></th>
+                            <th class="th-300" scope="col">Paciente <button id="invert-1" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">CPF <button  id="invert-2" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Nº Prontuário <button id="invert-3" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Nº Atendimento <button id="invert-4" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Dt. Entrada <button id="invert-5" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">UTI <button id="invert-6" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Setor <button id="invert-7" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Dt. Arquivo <button id="invert-8" class="button-table">–</button></th>
                             <th scope="col">Arquivo</th>
                             <th scope="col">eDok</th>
                         </tr>
@@ -295,10 +295,10 @@
     {% endif %}
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <script>
-    function invertButton(element){
+     function invertButton(element, ord){
          for (const button of document.getElementsByClassName('button-table')) {
             if (button.id === element.id) {
-                if([0x2013, 0x21E7].includes(element.innerHTML.charCodeAt(0))){
+                if(ord === 'asc'){
                     element.innerHTML = "⇩"
                 }else {
                     element.innerHTML = "⇧"
@@ -319,15 +319,17 @@
 
         [].forEach.call(headers, function(header, index) {
             header.addEventListener('click', function() {
+                const bt = header.querySelector('button')
+
             // This function will sort the column
-            sortColumn(index);
+            sortColumn(bt, index);
             });
         });
         const directions = Array.from(headers).map(function(header) {
             return '';
         });
 
-        const sortColumn = function(index) {
+        const sortColumn = function(bt, index) {
             // Clone the rows
             const direction = directions[index] || 'asc';
             const multiplier = (direction === 'asc') ? 1 : -1;
@@ -346,8 +348,10 @@
                     case cellA === cellB: return 0;
                 }
             });
-            directions[index] = direction === 'asc' ? 'desc' : 'asc';
 
+            invertButton(bt, direction)
+
+            directions[index] = direction === 'asc' ? 'desc' : 'asc';
 
             // Remove old rows
             [].forEach.call(rows, function(row) {

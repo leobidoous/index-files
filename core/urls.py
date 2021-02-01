@@ -23,7 +23,7 @@ app_name = 'core'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('api/', include('core.api.urls', namespace="api")),
-    path('logout/', LogoutView.as_view(next_page='core:home'), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='core:login'), name='logout'),
     path('login/', LoginView.as_view(template_name='core/base_login.html'), name='login'),
     path('redefinir-senha', SolicitarRedefinirSenha.as_view(), name='reset_password'),
     path('redefinir-senha/done', RedefinirSenhaCompleto.as_view(), name='password_reset_done'),
