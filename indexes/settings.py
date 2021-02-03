@@ -100,6 +100,12 @@ DATABASES = {
         'HOST': '144.22.112.15',
         'USER': 'postgres',
         'PASSWORD': 'DA-amh-2019'
+    },
+    'tasy_erp': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': '172.20.0.2:1521/dbprod.601076061.oraclecloud.internal',
+        'USER': 'tasy',
+        'PASSWORD': 'Tasy123',
     }
 }
 

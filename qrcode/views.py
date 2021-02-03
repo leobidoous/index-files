@@ -52,7 +52,7 @@ class QrCodeView(APIView):
 
     @staticmethod
     def post(request):
-        if request.FILES['myfile']:
+        try:
             myfile = request.FILES['myfile']
             qr_code = ManageQrCode(myfile.file)
             decoded_text = qr_code.get_decoded_text()
@@ -84,4 +84,5 @@ class QrCodeView(APIView):
             else:
                 payload['decoded_text'] = "Seu QR Code não foi identificado"
             return Response(payload, status=status.HTTP_200_OK)
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
