@@ -23,6 +23,21 @@ class HealthInsurance(models.Model):
     def __str__(self):
         return str(self.health_insurance)
 
+    #
+    # cd_empresa = models.PositiveIntegerField()
+    # ds_empresa = models.CharField(max_length=255)
+    #     cd_estabelecimento = models.PositiveIntegerField()
+    #     ds_estabelecimento = models.CharField(max_length=255)
+    #     nr_atendimento = models.PositiveIntegerField(primary_key=True)
+    #     nr_prontuario = models.PositiveIntegerField()
+    # cd_pessoa_fisica = models.CharField(max_length=255)
+    #     ds_pessoa_fisica = models.CharField(max_length=255)
+    #     nr_cpf = models.CharField(max_length=11)
+    #     cd_convenio = models.PositiveIntegerField()
+    #     ds_convenio = models.CharField(max_length=255)
+    #     cd_setor_atendimento = models.PositiveIntegerField()
+    #     ds_setor_atendimento = models.CharField(max_length=255)
+
 
 class IndexedFileModel(models.Model):
 
@@ -42,8 +57,8 @@ class IndexedFileModel(models.Model):
     location = models.ForeignKey(Location, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')
     url = models.CharField('Link prontuário', max_length=200, null=True, blank=True)
 
-    date_created = models.DateTimeField('Criado em:', auto_now_add=True)
-    last_update = models.DateTimeField('Atualizado em:', auto_now=True)
+    created_at = models.DateTimeField('Criado em:', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
 
     class Meta:
         verbose_name = 'Index'
@@ -56,7 +71,7 @@ class IndexedFileModel(models.Model):
         return str(self)
 
     def date_published(self):
-        return self.date_created.strftime('%B %d %Y')
+        return self.created_at.strftime('%B %d %Y')
 
     def get_short_name(self):
         return str(self).split(" ")[0]

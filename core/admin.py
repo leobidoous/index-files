@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 from core.api.v1.forms.indexed_file import IndexedFilerForm
 from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance, Sector
+from core.api.v1.models.patient import Patient
 
 
 class IndexedFilerAdmin(admin.ModelAdmin):
@@ -31,8 +32,12 @@ class HealthInsuranceAdmin(admin.ModelAdmin):
 class SectorAdmin(admin.ModelAdmin):
     pass
 
+class PatientAdmin(admin.ModelAdmin):
+    pass
+
 
 admin.site.register(IndexedFileModel, IndexedFilerAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(HealthInsurance, HealthInsuranceAdmin)
 admin.site.register(Sector, SectorAdmin)
+admin.site.register(Patient, PatientAdmin)

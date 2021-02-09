@@ -8,9 +8,11 @@ from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
 
 # For managing qrcode
+from core.api.v1.models.indexed_file import IndexedFileModel, Sector, Location, HealthInsurance
 from .manage_qr_code import ManageQrCode
 from .models import DocumentModel
 from .serializers import QrCodeSerializer
+from core.api.v1.models.tasy_patient import TasyPatient
 
 
 class QrCodeView(APIView):
@@ -64,6 +66,34 @@ class QrCodeView(APIView):
                     payload['name'] = myfile.name
                     payload['qr_code'] = model.qr_code
                     payload['qr_code_image'] = model.qr_code_image
+                    codes = decoded_text.split('-')
+                    nr_atendimento = codes[1]
+                    payload['nr_atendimento'] = nr_atendimento
+
+                    try:
+                        patient = TasyPatient.objects.using('tasy_erp').get(nr_atendimento=int(nr_atendimento))
+                        payload['patient'] = patient
+
+                        ######### Inserindo dados do paciente aqui #################
+                        location, created = Location.objects.get_or_create(location=patient.ds_estabelecimento)
+
+                        health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=patient.ds_convenio)
+
+                        IndexedFileModel.objects.get_or_create(
+                            name=patient.ds_pessoa_fisica,
+                            filename=myfile.name,
+                            nr_cpf=patient.nr_cpf,
+                            medical_records_number=patient.nr_prontuario,
+                            health_insurance=health_insurance,
+                            sector=patient.ds_setor_atendimento,
+                            attendance_number=patient.nr_atendimento,
+                            location=location,
+                            date_in=patient.dt_entrada,
+                            uti=patient.cd_unidade
+                        )
+                        ###########################################################
+                    except TasyPatient.DoesNotExist:
+                        pass
                     break
                 return Response(payload, status=status.HTTP_200_OK)
 
@@ -81,6 +111,10 @@ class QrCodeView(APIView):
 
                 if serializer.is_valid():
                     serializer.save()
+
+                codes = decoded_text.split('-')
+                nr_atendimento = codes[1]
+                payload['nr_atendimento'] = nr_atendimento
             else:
                 payload['decoded_text'] = "Seu QR Code não foi identificado"
             return Response(payload, status=status.HTTP_200_OK)
