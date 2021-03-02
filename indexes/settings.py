@@ -223,7 +223,7 @@ PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
-TIME_TO_READ_FILES = 15 #3600 # in seconds
+TIME_TO_READ_FILES = 3600 # in seconds
 
 try:
     from .local_settings import *
