@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from core.api.v1.models.indexed_file import IndexedFileModel, Location, Sector
+from core.api.v1.models.indexed_file import IndexedFileModel, Location, Sector, HealthInsurance
 
 
 # Create your views here.
@@ -99,11 +99,13 @@ class HomeView(ListView, LoginRequiredMixin):
         self.filters['medical_records_number'] = self.request.GET.get('medical_records_number')
 
         if not user.is_anonymous:
-            # if user.is_superuser:
-            #     qs = IndexedFileModel.objects.all().order_by("-date_file")
-            # else:
-            locations_user = user.locations.all()
-            health_insurance_user = user.health_insurances.all()
+            if user.is_superuser:
+                # qs = IndexedFileModel.objects.all().order_by("-date_file")
+                locations_user = Location.objects.all()
+                health_insurance_user = HealthInsurance.objects.all()
+            else:
+                locations_user = user.locations.all()
+                health_insurance_user = user.health_insurances.all()
 
             lc_nr = self.request.GET.get('locations')
             locations = []
