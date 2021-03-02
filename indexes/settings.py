@@ -216,13 +216,14 @@ LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
-PATH_FILES = "/mnt/tasyschedulerweb/"
+PATH_FILES = "/srv/ftp/"
+PATH_IOP = "ftp-iop/"
 
 PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
-TIME_TO_READ_FILES = 3600 # in seconds
+TIME_TO_READ_FILES = 15 #3600 # in seconds
 
 try:
     from .local_settings import *

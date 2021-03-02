@@ -23,7 +23,7 @@ app_name = 'v1'
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='Usuários')
-router.register('indexes', IndexedFileViewSet, basename='Indexes')
+# router.register('indexes', IndexedFileViewSet, basename='Indexes')
 
 urlpatterns = [
     path('', include(router.urls), name='endpoints'),

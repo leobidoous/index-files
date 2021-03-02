@@ -17,6 +17,8 @@ class TasyPatient(models.Model):
     ds_setor_atendimento = models.CharField(max_length=255)
     dt_entrada = models.DateTimeField()
     cd_unidade = models.CharField(max_length=255)
+    dt_nascimento = models.DateTimeField(null=True)
+    ie_sexo = models.CharField(max_length=1, null=True)
 
     class Meta:
         managed = False
