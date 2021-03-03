@@ -78,22 +78,13 @@ class HomeView(ListView, LoginRequiredMixin):
                 context['all'] = True
 
             # Preenche as outras locations, sem ser a selecionada.
-            if not self.request.user.is_anonymous:
-                for loc in Location.objects.exclude(id=new_location):
-                    context['locations'].append(loc)
-                    # Caso o setor seja 0 e a location seja 0,
-                    # então iremos imprimir todos os setores disponíveis, de todas as localizações
-                    if selected_location == 0:
-                        for sector in loc.sectors.all():
-                            context['sectors'].append(sector)
-            else:
-                for loc in self.request.user.locations.exclude(id=new_location):
-                    context['locations'].append(loc)
-                    # Caso o setor seja 0 e a location seja 0,
-                    # então iremos imprimir todos os setores disponíveis, de todas as localizações
-                    if selected_location == 0:
-                        for sector in loc.sectors.all():
-                            context['sectors'].append(sector)
+            for loc in self.request.user.locations.exclude(id=new_location):
+                context['locations'].append(loc)
+                # Caso o setor seja 0 e a location seja 0,
+                # então iremos imprimir todos os setores disponíveis, de todas as localizações
+                if selected_location == 0:
+                    for sector in loc.sectors.all():
+                        context['sectors'].append(sector)
         return context
 
     def get_queryset(self, *args, **kwargs):
