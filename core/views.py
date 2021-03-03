@@ -40,13 +40,42 @@ class HomeView(ListView, LoginRequiredMixin):
             context['sectors'] = []
             if self.request.GET.get('locations') is None:
                 selected_location = 0
+                context['loc_filter'] = 0
             else:
                 selected_location = int(self.request.GET.get('locations'))
+                context['loc_filter'] = self.request.GET.get('locations')
 
             if self.request.GET.get('sectors') is None:
                 selected_sector = 0
+                context['sec_filter'] = 0
             else:
                 selected_sector = int(self.request.GET.get('sectors'))
+                context['sec_filter'] = self.request.GET.get('sectors')
+
+            if self.request.GET.get('name') is None:
+                context['name_filter'] = ''
+            else:
+                context['name_filter'] = self.request.GET.get('name')
+
+            if self.request.GET.get('cpf') is None:
+                context['cpf_filter'] = ''
+            else:
+                context['cpf_filter'] = self.request.GET.get('cpf')
+
+            if self.request.GET.get('medical_records_number') is None:
+                context['mr_filter'] = ''
+            else:
+                context['mr_filter'] = self.request.GET.get('medical_records_number')
+
+            if self.request.GET.get('attendance_number') is None:
+                context['at_filter'] = ''
+            else:
+                context['at_filter'] = self.request.GET.get('attendance_number')
+
+            if self.request.GET.get('date_in') is None:
+                context['dt_filter'] = ''
+            else:
+                context['dt_filter'] = self.request.GET.get('date_in')
 
             new_location = selected_location
 

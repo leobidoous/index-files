@@ -233,12 +233,12 @@
                 <nav aria-label="Page navigation" class="content-scrolable">
                     <ul class="pagination justify-content-center">
                         {% if page_obj.paginator.num_pages != 1 %}
-                            <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
+                            <li class="page-item"><a class="page-link" href="?page=1&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">Primeira</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Última</a></li>
                         {% endif %}
                         {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">&laquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
@@ -248,18 +248,18 @@
                                 <li class="page-item active"><a class="page-link" href="#">{{ i }} <span
                                         class="sr-only">(current)</span></a></li>
                             {% elif page_obj.number > i|add:"-5" and page_obj.number < i|add:"+5" %}
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">{{ i }}</a></li>
                             {% endif %}
                         {% endfor %}
                         {% if page_obj.has_next %}
                             <li class="page-item"><a class="page-link"
-                                                     href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                                     href="?page={{ page_obj.next_page_number }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">&raquo;</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
                         {% endif %}
                         {% if page_obj.paginator.num_pages != page_obj.number %}
                             <li class="page-item"><a class="page-link"
-                                                     href="?page={{ page_obj.paginator.num_pages }}">Última</a></li>
+                                                     href="?page={{ page_obj.paginator.num_pages }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">Última</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Última</a></li>
                         {% endif %}
