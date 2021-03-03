@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import datetime
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # import dj_database_url
@@ -224,6 +226,16 @@ PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
 TIME_TO_READ_FILES = 3600 # in seconds
+
+sentry_sdk.init(
+    dsn="https://325040ee2bc74f4a8180b2a0a48ed354@o530031.ingest.sentry.io/5660306",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 try:
     from .local_settings import *
