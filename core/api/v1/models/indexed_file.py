@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 class Location(models.Model):
     location = models.CharField('Estabelecimento', max_length=255, unique=True)
 
+    created_at = models.DateTimeField('Criado em:', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
+
     def __str__(self):
         return str(self.location)
 
@@ -13,12 +16,18 @@ class Sector(models.Model):
     sector_name = models.CharField('Setor', max_length=255, unique=True)
     location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, related_name="sectors")
 
+    created_at = models.DateTimeField('Criado em:', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
+
     def __str__(self):
         return str(self.sector_name)
 
 
 class HealthInsurance(models.Model):
     health_insurance = models.CharField('Nome do convênio', max_length=255, unique=True)
+
+    created_at = models.DateTimeField('Criado em:', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
 
     def __str__(self):
         return str(self.health_insurance)
