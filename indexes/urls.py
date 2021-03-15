@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('', include('core.urls', namespace="core")),
     path('', include('edok.urls', namespace='edok')),
+    path('qrcode/', include('qrcode.urls', namespace='qrcode'))
 ]
 
 

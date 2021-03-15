@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import datetime
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # import dj_database_url
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'user',
     'authentication',
     'edok',
+    'qrcode',
 
 ]
 
@@ -99,6 +102,12 @@ DATABASES = {
         'HOST': '144.22.112.15',
         'USER': 'postgres',
         'PASSWORD': 'DA-amh-2019'
+    },
+    'tasy_erp': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': '172.20.0.2:1521/dbprod.601076061.oraclecloud.internal',
+        'USER': 'tasy',
+        'PASSWORD': 'Tasy123',
     }
 }
 
@@ -187,7 +196,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "core", "static"),
+]
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -205,13 +218,24 @@ LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
-PATH_FILES = "/mnt/tasyschedulerweb/"
+PATH_FILES = "/srv/ftp/"
+PATH_IOP = "ftp-iop/"
 
 PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
 TIME_TO_READ_FILES = 3600 # in seconds
+
+sentry_sdk.init(
+    dsn="https://325040ee2bc74f4a8180b2a0a48ed354@o530031.ingest.sentry.io/5660306",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 try:
     from .local_settings import *

@@ -4,14 +4,47 @@
     {% if user.is_authenticated %}
         <div class="content-inside">
             <div class="content-filters">
-                <form method="get">
+                <form id="main-form" method="get">
                     <fieldset>
                         <div>
-                            <h5><b>Procurar arquivos</b></h5>
+
+{#                            <h5><b>Procurar arquivos</b></h5>#}
                             <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
+
+                            <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
+                            <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
+
+                                {% if not request.GET.locations or all%}
+                                    <option value="0">Todos</option>
+                                {% endif %}
+
+                                {% for loc in locations %}
+                                        <option value="{{ loc.id }}"> {{ loc.location }} </option>
+                                {% endfor %}
+
+                                {% if request.GET.locations and request.GET.locations != 0|slugify%}
+                                    <option value="0">Todos</option>
+                                {% endif %}
+                            </select>
+
+                            <label for="sectors"><h5><b>Setor:</b></h5></label>
+                            <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
+                            {% if not request.GET.sectors or request.GET.sectors == 0|slugify%}
+                                    <option value="0">Todos</option>
+                                {% endif %}
+                                {% for sec in sectors %}
+                                    <option value="{{ sec.pk }}"> {{ sec.sector_name }} </option>
+                                {% endfor %}
+
+                                {% if request.GET.sectors and request.GET.sectors != 0|slugify%}
+                                    <option value="0">Todos</option>
+                                {% endif %}
+                            </select>
+                            <br><br>
                         </div>
                         <div class="form-row">
+
                             <div class="col-md">
                                 <label for="name">Nome do Paciente</label>
                                 <input type="text" class="form-control"
@@ -25,13 +58,13 @@
                                        name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
                                        value="{{ filters.cpf }}" {% endif %} id="cpf">
                             </div>
-                            <div class="col-md">
-                                <label for="birth">Data de Nascimento do Paciente</label>
-                                <input type="date" class="form-control"
-                                       placeholder="Informe a data de nascimento do paciente"
-                                       name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}
-                                       id="birth">
-                            </div>
+                            {#                            <div class="col-md">#}
+                            {#                                <label for="birth">Data de Nascimento do Paciente</label>#}
+                            {#                                <input type="date" class="form-control"#}
+                            {#                                       placeholder="Informe a data de nascimento do paciente"#}
+                            {#                                       name="birth" {% if filters.birth %} value="{{ filters.birth }}" {% endif %}#}
+                            {#                                       id="birth">#}
+                            {#                            </div>#}
                         </div>
 
                         <div class="form-row">
@@ -48,12 +81,12 @@
                                        name="attendance_number" {% if filters.attendance_number %}
                                        value="{{ filters.attendance_number }}" {% endif %} id="attendance_number">
                             </div>
-                            <div class="col-md">
-                                <label for="sector">Setor</label>
-                                <input type="text" class="form-control" placeholder="Informe o setor"
-                                       name="sector" {% if filters.sector %}
-                                       value="{{ filters.sector }}" {% endif %} id="sector">
-                            </div>
+                            {#                            <div class="col-md">#}
+                            {#                                <label for="sector">Setor</label>#}
+                            {#                                <input type="text" class="form-control" placeholder="Informe o setor"#}
+                            {#                                       name="sector" {% if filters.sector %}#}
+                            {#                                       value="{{ filters.sector }}" {% endif %} id="sector">#}
+                            {#                            </div>#}
                             <div class="col-md">
                                 <label for="birth">Data de Entrada do Paciente</label>
                                 <input type="date" class="form-control"
@@ -83,19 +116,17 @@
 
             {% if files %}
                 <div class="content-scrolable">
-                    <table class="table table-hover table-light ">
+                    <table id ="index-table" class="table table-hover table-light">
                         <thead class="thead-dark">
                         <tr class="content-scrolable">
-                            <th class="th-300" scope="col">Paciente</th>
-                            <th class="th-200" scope="col">CPF</th>
-                            <th class="th-200" scope="col">Nº Prontuário</th>
-                            <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-200" scope="col">Dt. Entrada</th>
-                            <th class="th-200" scope="col">UTI</th>
-                            <th class="th-200" scope="col">Setor</th>
-                            <th class="th-200" scope="col">Dt. Arquivo</th>
+                            <th class="th-300" scope="col">Paciente <button id="invert-1" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">CPF <button  id="invert-2" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Nº Prontuário <button id="invert-3" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Nº Atendimento <button id="invert-4" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Dt. Entrada <button id="invert-5" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">UTI <button id="invert-6" class="button-table">–</button></th>
+                            <th class="th-200" scope="col">Setor <button id="invert-7" class="button-table">–</button></th>
                             <th scope="col">Arquivo</th>
-                            <th scope="col">eDok</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -114,25 +145,8 @@
                                 <td>{% if file.uti %} {{ file.uti }} {% else %} - {% endif %}</td>
                                 <td>{% if file.sector %}
                                     {{ file.sector }} {% else %} - {% endif %}</td>
-                                <td>{% if file.date_file %}
-                                    {{ file.date_file|date:"d/m/Y" }} {% else %} - {% endif %}</td>
                                 <th scope="row" style="color: black">
                                     <a class="glyphicon-link" href="{{ file.url }}" target="_blank">
-                                        <svg width="2em" height="1.5em" viewBox="0 0 16 16"
-                                             class="bi bi-file-earmark-arrow-down" fill="currentColor"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 1h5v1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6h1v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z"></path>
-                                            <path d="M9 4.5V1l5 5h-3.5A1.5 1.5 0 0 1 9 4.5z"></path>
-                                            <path fill-rule="evenodd"
-                                                  d="M5.646 9.146a.5.5 0 0 1 .708 0L8 10.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708z"></path>
-                                            <path fill-rule="evenodd"
-                                                  d="M8 6a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4A.5.5 0 0 1 8 6z"></path>
-                                        </svg>
-                                    </a>
-                                </th>
-                                <th scope="row" style="color: black">
-                                    <a class="glyphicon-link"
-                                       href="{{ url }}&ID=0000{{ file.attendance_number|cut:"." }}" target="_blank">
                                         <svg width="2em" height="1.5em" viewBox="0 0 16 16"
                                              class="bi bi-file-earmark-arrow-down" fill="currentColor"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -157,14 +171,14 @@
                     <table class="table table-hover table-light ">
                         <thead class="thead-dark">
                         <tr class="content-scrolable">
-                            <th class="th-300" scope="col">Paciente</th>
-                            <th class="th-200" scope="col">CPF</th>
-                            <th class="th-200" scope="col">Nº Prontuário</th>
-                            <th class="th-200" scope="col">Nº Atendimento</th>
-                            <th class="th-200" scope="col">Dt. Entrada</th>
-                            <th class="th-200" scope="col">UTI</th>
-                            <th class="th-200" scope="col">Setor</th>
-                            <th class="th-200" scope="col">Dt. Arquivo</th>
+                            <th class="th-300" scope="col"">Paciente</th>
+                            <th class="th-200" scope="col"">CPF</th>
+                            <th class="th-200" scope="col"">Nº Prontuário</th>
+                            <th class="th-200" scope="col"">Nº Atendimento</th>
+                            <th class="th-200" scope="col"">Dt. Entrada</th>
+                            <th class="th-200" scope="col"">UTI</th>
+                            <th class="th-200" scope="col"">Setor</th>
+                            <th class="th-200" scope="col"">Dt. Arquivo</th>
                             <th scope="col">Arquivo</th>
                             <th scope="col">eDok</th>
                         </tr>
@@ -219,12 +233,12 @@
                 <nav aria-label="Page navigation" class="content-scrolable">
                     <ul class="pagination justify-content-center">
                         {% if page_obj.paginator.num_pages != 1 %}
-                            <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
+                            <li class="page-item"><a class="page-link" href="?page=1&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">Primeira</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Última</a></li>
                         {% endif %}
                         {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">&laquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
@@ -234,18 +248,18 @@
                                 <li class="page-item active"><a class="page-link" href="#">{{ i }} <span
                                         class="sr-only">(current)</span></a></li>
                             {% elif page_obj.number > i|add:"-5" and page_obj.number < i|add:"+5" %}
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">{{ i }}</a></li>
                             {% endif %}
                         {% endfor %}
                         {% if page_obj.has_next %}
                             <li class="page-item"><a class="page-link"
-                                                     href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                                     href="?page={{ page_obj.next_page_number }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">&raquo;</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
                         {% endif %}
                         {% if page_obj.paginator.num_pages != page_obj.number %}
                             <li class="page-item"><a class="page-link"
-                                                     href="?page={{ page_obj.paginator.num_pages }}">Última</a></li>
+                                                     href="?page={{ page_obj.paginator.num_pages }}&locations={{ loc_filter }}&sectors={{ sec_filter }}&name={{ name_filter }}&cpf={{ cpf_filter }}&medical_records_number={{ mr_filter }}&attendance_number={{ at_filter }}&date_in={{ dt_filter }}">Última</a></li>
                         {% else %}
                             <li class="page-item disabled"><a class="page-link" href="#">Última</a></li>
                         {% endif %}
@@ -255,8 +269,90 @@
 
 
         </div>
+        
 
     {% else %}
         <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
     {% endif %}
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <script>
+     function invertButton(element, ord){
+         for (const button of document.getElementsByClassName('button-table')) {
+            if (button.id === element.id) {
+                if(ord === 'asc'){
+                    element.innerHTML = "⇩"
+                }else {
+                    element.innerHTML = "⇧"
+                }
+            }else {
+                button.innerHTML = "–";
+            }
+        }
+    }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.getElementById('index-table');
+        const tableBody = table.querySelector('tbody');
+        const rows = tableBody.querySelectorAll('tr');
+        // Query the headers
+        const headers = table.querySelectorAll('th');
+
+        [].forEach.call(headers, function(header, index) {
+            header.addEventListener('click', function() {
+                const bt = header.querySelector('button')
+
+            // This function will sort the column
+            sortColumn(bt, index);
+            });
+        });
+        const directions = Array.from(headers).map(function(header) {
+            return '';
+        });
+
+        const sortColumn = function(bt, index) {
+            // Clone the rows
+            const direction = directions[index] || 'asc';
+            const multiplier = (direction === 'asc') ? 1 : -1;
+            const newRows = Array.from(rows);
+
+            // Sort rows by the content of cells
+            newRows.sort(function(rowA, rowB) {
+                // Get the content of cells
+                // Pega a primeira coluna e a segunda coluna?
+                const cellA = rowA.querySelectorAll('td')[index].innerHTML;
+                const cellB = rowB.querySelectorAll('td')[index].innerHTML;
+
+                switch (true) {
+                    case cellA > cellB: return multiplier;
+                    case cellA < cellB: return -1 * multiplier;
+                    case cellA === cellB: return 0;
+                }
+            });
+
+            invertButton(bt, direction)
+
+            directions[index] = direction === 'asc' ? 'desc' : 'asc';
+
+            // Remove old rows
+            [].forEach.call(rows, function(row) {
+                tableBody.removeChild(row);
+            });
+
+            // Append new row
+            newRows.forEach(function(newRow) {
+                tableBody.appendChild(newRow);
+            });
+        };
+        });
+    function resetSector(){
+            $('#sectors').val("0");
+            $('#main-form').submit()
+        }
+    </script>
+    <script>
+        function searchBySector(){
+            $('#main-form').submit()
+        }
+    </script>
 {% endblock %}
