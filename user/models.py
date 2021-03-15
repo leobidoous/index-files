@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 import uuid
 import re
-from core.api.v1.models.indexed_file import Location, HealthInsurance
+from core.models import Location, HealthInsurance
 from django.contrib.auth.hashers import identify_hasher
 
 

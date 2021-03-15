@@ -1,5 +1,4 @@
 import datetime
-import re
 
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +7,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from core.api.v1.models.indexed_file import IndexedFileModel
+from core.models import IndexedFileModel
 
 
 # Create your views here.

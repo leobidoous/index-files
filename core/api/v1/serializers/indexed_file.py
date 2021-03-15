@@ -1,6 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers, mixins
-from core.api.v1.models.indexed_file import IndexedFileModel
+from core.models import IndexedFileModel
 
 
 class IndexedFileSerializer(serializers.ModelSerializer, mixins.CreateModelMixin):
