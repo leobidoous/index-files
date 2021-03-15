@@ -8,11 +8,11 @@ from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
 
 # For managing qrcode
-from core.api.v1.models.indexed_file import IndexedFileModel, Sector, Location, HealthInsurance
+from core.models import IndexedFileModel, Location, HealthInsurance
 from .manage_qr_code import ManageQrCode
 from .models import DocumentModel
 from .serializers import QrCodeSerializer
-from core.api.v1.models.tasy_patient import TasyPatient
+from core.models.tasy_patient import TasyPatient
 
 
 class QrCodeView(APIView):

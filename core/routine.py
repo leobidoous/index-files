@@ -1,6 +1,3 @@
-
-
-import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from django.conf import settings
@@ -15,8 +12,8 @@ class RunJobs:
         import os
         import shutil
         from qrcode.models import DocumentModel
-        from core.api.v1.models.indexed_file import Location, HealthInsurance, IndexedFileModel, Sector
-        from core.api.v1.models.tasy_patient import TasyPatient
+        from core.models import Location, HealthInsurance, IndexedFileModel, Sector
+        from core.models import TasyPatient
 
         print("*********************** CARREGANDO IOP ********************************")
         path = settings.PATH_FILES+settings.PATH_IOP
