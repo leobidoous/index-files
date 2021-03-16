@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView
 
-from core.api.v1.models.indexed_file import IndexedFileModel, Location, Sector, HealthInsurance
+from core.models import IndexedFileModel, Location, Sector, HealthInsurance
 
 
 # Create your views here.

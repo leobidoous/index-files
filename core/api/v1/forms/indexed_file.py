@@ -2,7 +2,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from core.api.v1.models.indexed_file import IndexedFileModel
+from core.models import IndexedFileModel
 
 
 class IndexedFileAdminCreationForm(UserCreationForm):

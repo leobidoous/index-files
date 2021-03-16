@@ -3,8 +3,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 
 from core.api.v1.forms.indexed_file import IndexedFilerForm
-from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance, Sector
-from core.api.v1.models.patient import Patient
+from core.models import IndexedFileModel, Location, HealthInsurance, Sector, Patient
 
 
 class IndexedFilerAdmin(admin.ModelAdmin):

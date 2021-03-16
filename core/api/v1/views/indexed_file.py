@@ -1,20 +1,15 @@
 import datetime
-import os
 import pathlib
-import time
-from datetime import date
 from io import StringIO
-from pprint import pprint
 
 from django.db import transaction
 
 from django.http import StreamingHttpResponse
 from pdfminer.layout import LAParams
 from rest_framework import viewsets, mixins
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.api.v1.models.indexed_file import IndexedFileModel, Location, HealthInsurance
+from core.models import IndexedFileModel, Location, HealthInsurance
 from core.api.v1.serializers.indexed_file import IndexedFileSerializer
 from core.pagination import DefaultResultsSetPagination
 
