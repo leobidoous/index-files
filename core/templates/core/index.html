@@ -6,43 +6,72 @@
             <div class="content-filters">
                 <form id="main-form" method="get">
                     <fieldset>
+                        
                         <div>
 
-{#                            <h5><b>Procurar arquivos</b></h5>#}
+{#                          <h5><b>Procurar arquivos</b></h5>#}
                             <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
 
-                            <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
-                            <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
+                            <div class="form-row">
+                                <div class="col-md">
+                                    <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
+                                    <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
 
-                                {% if not request.GET.locations or all%}
-                                    <option value="0">Todos</option>
-                                {% endif %}
+                                        {% if not request.GET.locations or all%}
+                                            <option value="0">Todos</option>
+                                        {% endif %}
 
-                                {% for loc in locations %}
-                                        <option value="{{ loc.id }}"> {{ loc.location }} </option>
-                                {% endfor %}
+                                        {% for loc in locations %}
+                                                <option value="{{ loc.id }}"> {{ loc.location }} </option>
+                                        {% endfor %}
 
-                                {% if request.GET.locations and request.GET.locations != 0|slugify%}
-                                    <option value="0">Todos</option>
-                                {% endif %}
-                            </select>
+                                        {% if request.GET.locations and request.GET.locations != 0|slugify%}
+                                            <option value="0">Todos</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="col-md">
+                                    <label for="sectors"><h5><b>Setor:</b></h5></label>
+                                    <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
+                                    {% if not request.GET.sectors or request.GET.sectors == 0|slugify%}
+                                            <option value="0">Todos</option>
+                                        {% endif %}
+                                        {% for sec in sectors %}
+                                            <option value="{{ sec.pk }}"> {{ sec.sector_name }} </option>
+                                        {% endfor %}
 
-                            <label for="sectors"><h5><b>Setor:</b></h5></label>
-                            <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
-                            {% if not request.GET.sectors or request.GET.sectors == 0|slugify%}
-                                    <option value="0">Todos</option>
-                                {% endif %}
-                                {% for sec in sectors %}
-                                    <option value="{{ sec.pk }}"> {{ sec.sector_name }} </option>
-                                {% endfor %}
+                                        {% if request.GET.sectors and request.GET.sectors != 0|slugify%}
+                                            <option value="0">Todos</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
 
-                                {% if request.GET.sectors and request.GET.sectors != 0|slugify%}
-                                    <option value="0">Todos</option>
-                                {% endif %}
-                            </select>
+                                <div class="col-md">
+                                    <label for="tipo_documento"><h5><b>Insira o Tipo do Documento:</b></h5></label>
+                                    <select name="tipo_documento" id="tipo_documento" class="btn btn-info">
+                                        {% if request.GET.tipo_documento and request.GET.tipo_documento == 'd' %}
+                                            <option value="d">Digitalizado</option>
+                                            <option value="p">Prontuário</option>
+                                            <option value="">Todos</option>
+                                        {% elif request.GET.tipo_documento and request.GET.tipo_documento == 'p'%}
+                                            <option value="p">Prontuário</option>
+                                            <option value="d">Digitalizado</option>
+                                            <option value="">Todos</option>
+                                        {% else %}
+                                            <option value="">Todos</option>
+                                            <option value="d">Digitalizado</option>
+                                            <option value="p">Prontuário</option>
+                                        {% endif %}
+                                    </select>
+
+                                </div>
+
+                            </div>
                             <br><br>
+                            
                         </div>
+
                         <div class="form-row">
 
                             <div class="col-md">
@@ -58,6 +87,8 @@
                                        name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
                                        value="{{ filters.cpf }}" {% endif %} id="cpf">
                             </div>
+
+
                             {#                            <div class="col-md">#}
                             {#                                <label for="birth">Data de Nascimento do Paciente</label>#}
                             {#                                <input type="date" class="form-control"#}
