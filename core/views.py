@@ -27,6 +27,7 @@ class HomeView(ListView, LoginRequiredMixin):
         "health_insurance": "",
         "attendance_number": "",
         "medical_records_number": "",
+        "tipo_documento": ""
     }
 
     def get_context_data(self, *args, object_list=None, **kwargs):

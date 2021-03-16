@@ -34,7 +34,7 @@ def processar_digitalizado_iop():
         filter_name = os.path.split(pdf_path)[1]
         # Verifica se o pdf já está na base DocumentModel
         # Se já existir então já foi lido e ignora o resto da iteração
-        if DocumentModel.objects.filter(name__icontains=filter_name):
+        if DocumentModel.objects.filter(name__iexact=filter_name):
             print(f"Already exists on database the: {filter_name}")
             continue
 
