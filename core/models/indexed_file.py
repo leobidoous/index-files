@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from core.choices import IndexedFileChoices
 
 
 class Location(models.Model):
@@ -65,6 +66,7 @@ class IndexedFileModel(models.Model):
     uti = models.CharField('Número do leito', max_length=255, null=True, blank=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')
     url = models.CharField('Link prontuário', max_length=200, null=True, blank=True)
+    tipo_documento = models.CharField('Tipo do Documento', max_length=50, choices=IndexedFileChoices.tipo(), null=True, blank=True)
 
     created_at = models.DateTimeField('Criado em:', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
