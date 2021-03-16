@@ -78,6 +78,11 @@ class HomeView(ListView, LoginRequiredMixin):
             else:
                 context['dt_filter'] = self.request.GET.get('date_in')
 
+            if self.request.GET.get('tipo_documento') in None:
+                context['tipo_filter'] = ''
+            else:
+                context['tipo_filter'] = self.request.GET.get('date_in')
+
             new_location = selected_location
 
             # Tenta encontrar uma location com o id selecionado
@@ -127,6 +132,7 @@ class HomeView(ListView, LoginRequiredMixin):
         self.filters['health_insurance'] = self.request.GET.get('health_insurance')
         self.filters['attendance_number'] = self.request.GET.get('attendance_number')
         self.filters['medical_records_number'] = self.request.GET.get('medical_records_number')
+        self.filters['tipo_documento'] = self.request.GET.get('tipo_documento')
 
         if not user.is_anonymous:
             if user.is_superuser:
@@ -141,14 +147,12 @@ class HomeView(ListView, LoginRequiredMixin):
             locations = []
 
             if lc_nr is None or int(lc_nr) == 0:
-                lc_nr = 0
                 for obj in locations_user:
                     locations.append(obj.pk)
             else:
                 if lc_nr is not None and Location.objects.filter(id=int(lc_nr)):
                     locations.append(int(lc_nr))
                 else:
-                    lc_nr = 0
                     for obj in locations_user:
                         locations.append(obj.pk)
 
@@ -186,6 +190,8 @@ class HomeView(ListView, LoginRequiredMixin):
                 qs = qs.filter(nr_cpf__iexact=self.filters['nr_cpf'].replace('.', '').replace('-', ''))
             if self.filters['attendance_number']:
                 qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
+            if self.filters['tipo_documento']:
+                qs = qs.filter(attendance_number__icontains=self.filters['tipo_documento'])
 
             return qs
         return super(HomeView, self).get_queryset()
