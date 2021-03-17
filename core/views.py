@@ -78,21 +78,28 @@ class HomeView(ListView, LoginRequiredMixin):
             else:
                 context['dt_filter'] = self.request.GET.get('date_in')
 
-            if self.request.GET.get('tipo_documento') in None:
+            if self.request.GET.get('tipo_documento') is None:
                 context['tipo_filter'] = ''
             else:
-                context['tipo_filter'] = self.request.GET.get('date_in')
+                context['tipo_filter'] = self.request.GET.get('tipo_documento')
 
             new_location = selected_location
 
             # Tenta encontrar uma location com o id selecionado
-            loc_temp = self.request.user.locations.all().filter(id=selected_location)
+            if self.request.user.is_superuser:
+                loc_temp = Location.objects.all().filter(id=selected_location)
+            else:
+                loc_temp = self.request.user.locations.all().filter(id=selected_location)
 
             # Se não foi possível encontrar a localização e o setor foi selecionado,
             # então vamos encontrar a location desse setor
             if not loc_temp and selected_sector != 0:
                 # Se entrar aqui, então não tem prioridade de exibição (ou seja, Todos(location = 0) é o escolhido
-                loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
+                if self.request.user.is_superuser:
+                    loc_temp = Location.objects.filter(sectors__id=selected_sector)
+                else:
+                    loc_temp = self.request.user.locations.filter(sectors__id=selected_sector)
+
                 # Atribui uma nova id para a selecionada (para definir a prioridade do contexto)
                 if loc_temp:
                     new_location = loc_temp.get().id
@@ -113,7 +120,12 @@ class HomeView(ListView, LoginRequiredMixin):
                 context['all'] = True
 
             # Preenche as outras locations, sem ser a selecionada.
-            for loc in self.request.user.locations.exclude(id=new_location):
+            if self.request.user.is_superuser:
+                locations = Location.objects.exclude(id=new_location)
+            else:
+                locations = self.request.user.locations.exclude(id=new_location)
+
+            for loc in locations:
                 context['locations'].append(loc)
                 # Caso o setor seja 0 e a location seja 0,
                 # então iremos imprimir todos os setores disponíveis, de todas as localizações
@@ -191,7 +203,7 @@ class HomeView(ListView, LoginRequiredMixin):
             if self.filters['attendance_number']:
                 qs = qs.filter(attendance_number__icontains=self.filters['attendance_number'])
             if self.filters['tipo_documento']:
-                qs = qs.filter(attendance_number__icontains=self.filters['tipo_documento'])
+                qs = qs.filter(tipo_documento__iexact=self.filters['tipo_documento'])
 
             return qs
         return super(HomeView, self).get_queryset()

@@ -9,8 +9,7 @@ from core.models import IndexedFileModel, Location, HealthInsurance, Sector, Pat
 class IndexedFilerAdmin(admin.ModelAdmin):
     form = IndexedFilerForm
     fields = ['name', 'nr_cpf', 'sex', 'birth', 'medical_records_number', 'date_in', 'health_insurance', 'location',
-              'sector',
-              'attendance_number', 'uti', 'url']
+              'sector', 'tipo_documento', 'attendance_number', 'uti', 'url']
 
     def save_model(self, request, obj, form, change):
         try:

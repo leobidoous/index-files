@@ -84,6 +84,7 @@ def processar_digitalizado_iop():
                 sex=patient.ie_sexo,
                 url='https://' + settings.SITE_NAME + settings.MEDIA_URL + "iop/" + filter_name,
                 tipo_documento='d',
+                fonte_documento='iop',
             )
             ###########################################################
         except TasyPatient.DoesNotExist:
@@ -145,6 +146,9 @@ def processar_prontuario_iop():
             if text[29]:
                 location, created = Location.objects.get_or_create(location=text[29])
                 indexed_file_dict['location'] = location.pk
+                if text[18]:
+                    sector, created = Sector.objects.get_or_create(location=location.pk, sector_name=text[18])
+                    indexed_file_dict['location'] = sector.pk
             if text[17]:
                 health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[17])
                 indexed_file_dict['health_insurance'] = health_insurance.pk
