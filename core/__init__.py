@@ -7,4 +7,5 @@ class CoreConfig(AppConfig):
     name = 'core'
 
     def ready(self):
-        from . import routine
+        from core.routine import start
+        start()

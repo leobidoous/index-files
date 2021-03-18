@@ -1,5 +1,6 @@
 {% extends "core/base_view.html" %}
 {% load static %}
+{% load tz %}
 {% block content %}
     {% if user.is_authenticated %}
         <div class="content-inside">
@@ -12,10 +13,12 @@
 {#                          <h5><b>Procurar arquivos</b></h5>#}
                             <h6><b>Insira um ou mais filtros para procurar por um arquivo.</b></h6>
                             <hr>
-
-                            <div class="form-row">
+                            
+                            <div class="d-flex flex-wrap" style="width: 80%">
                                 <div class="col-md">
+
                                     <label for="locations"><h5><b>Estabelecimento:</b></h5></label>
+                                    <br>
                                     <select name="locations" id="locations" class="btn btn-info" onchange=resetSector()>
 
                                         {% if not request.GET.locations or all%}
@@ -30,9 +33,11 @@
                                             <option value="0">Todos</option>
                                         {% endif %}
                                     </select>
+
                                 </div>
                                 <div class="col-md">
                                     <label for="sectors"><h5><b>Setor:</b></h5></label>
+                                    <br>
                                     <select name="sectors" id="sectors" class="btn btn-info" onchange="searchBySector()">
                                     {% if not request.GET.sectors or request.GET.sectors == 0|slugify%}
                                             <option value="0">Todos</option>
@@ -47,31 +52,12 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md">
-                                    <label for="tipo_documento"><h5><b>Tipo do Documento:</b></h5></label>
-                                    <select name="tipo_documento" id="tipo_documento" class="btn btn-info">
-                                        {% if request.GET.tipo_documento and request.GET.tipo_documento == 'd' %}
-                                            <option value="d">Digitalizado</option>
-                                            <option value="p">Prontuário</option>
-                                            <option value="">Todos</option>
-                                        {% elif request.GET.tipo_documento and request.GET.tipo_documento == 'p'%}
-                                            <option value="p">Prontuário</option>
-                                            <option value="d">Digitalizado</option>
-                                            <option value="">Todos</option>
-                                        {% else %}
-                                            <option value="">Todos</option>
-                                            <option value="d">Digitalizado</option>
-                                            <option value="p">Prontuário</option>
-                                        {% endif %}
-                                    </select>
-                                </div>
-
                             </div>
                             <br><br>
                             
                         </div>
 
-                        <div class="form-row">
+                        <div class="d-flex flex-wrap">
 
                             <div class="col-md">
                                 <label for="name">Nome do Paciente</label>
@@ -80,11 +66,11 @@
                                        name="name" {% if filters.name %} value="{{ filters.name }}" {% endif %}
                                        id="name">
                             </div>
-                            <div class="col-md">
+                            <div class="col-md-5">
                                 <label for="cpf">Informe o CPF do Paciente</label>
-                                <input type="text" class="form-control" placeholder="CPF do paciente"
-                                       name="cpf" data-mask="000.000.000-00" {% if filters.cpf %}
-                                       value="{{ filters.cpf }}" {% endif %} id="cpf">
+                                <input type="text" class="form-control cpf-mask" placeholder="CPF do paciente"
+                                       name="cpf" data-mask="000.000.000-00"  minlength="14" maxlength="14" size="14" {% if filters.cpf %}
+                                       value="{{ filters.cpf }}" {% endif %} id="cpf" hel>
                             </div>
 
 
@@ -97,7 +83,7 @@
                             {#                            </div>#}
                         </div>
 
-                        <div class="form-row">
+                        <div class="d-flex flex-wrap">
                             <div class="col-md">
                                 <label for="medical_records_number">Número do Prontuário</label>
                                 <input type="text" class="form-control" placeholder="Informe o número do prontuário"
@@ -124,17 +110,37 @@
                                        name="date_in" {% if filters.date_in %} value="{{ filters.date_in }}" {% endif %}
                                        id="date_in">
                             </div>
+                            
+                            <div class="col-md" style="align-items: flex-start;">
+                                <div>
+                                    <label for="tipo_documento">Tipo do Documento</label>
+                                </div>
+                                <div>
+                                    <select name="tipo_documento" id="tipo_documento" class="btn btn-info">
+                                        {% if request.GET.tipo_documento and request.GET.tipo_documento == 'd' %}
+                                            <option value="d">Digitalizado</option>
+                                            <option value="p">Prontuário</option>
+                                            <option value="">Todos</option>
+                                        {% elif request.GET.tipo_documento and request.GET.tipo_documento == 'p'%}
+                                            <option value="p">Prontuário</option>
+                                            <option value="d">Digitalizado</option>
+                                            <option value="">Todos</option>
+                                        {% else %}
+                                            <option value="">Todos</option>
+                                            <option value="d">Digitalizado</option>
+                                            <option value="p">Prontuário</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
 
 
                         </div>
-                        <div class="form-row">
-                            <div style="margin-right: 5px; margin-left: 5px">
+                        <div class="d-flex flex-wrap" style="justify-content: flex-start;">
+                            <div class="col-md">
                                 <a href= "{% url 'core:home' %}">
                                     <button class="btn btn-outline-danger" type="button">Limpar</button>
                                 </a>
-
-                            </div>
-                            <div style="margin-right: 5px; margin-left: 5px">
                                 <button class="btn btn-info" type="submit">
                                     Procurar
                                 </button>
@@ -157,22 +163,57 @@
                             <th class="th-200" scope="col">UTI <button id="invert-7" class="button-table">–</button></th>
                             <th class="th-200" scope="col">Setor <button id="invert-8" class="button-table">–</button></th>
                             <th scope="col">Arquivo</th>
+                            <th class="th-200" scope="col">Última atualização <button id="invert-9" class="button-table">–</button></th>
                         </tr>
                         </thead>
                         {% if files %}
                             <tbody>
                                 {% for file in files %}
                                     <tr>
-                                        <td>{% if file.name %} {{ file.name }} {% else %} - {% endif %}</td>
-                                        <td>{% if file.nr_cpf %} {{ file.nr_cpf }} {% else %} - {% endif %}</td>
-                                        {# <td>{% if file.birth %} {{ file.birth|date:"d/m/Y" }} {% else %} - {% endif %}</td>#}
-                                        <td>{% if file.medical_records_number %} {{ file.medical_records_number }} {% else %} - {% endif %}</td>
-                                        <td>{% if file.attendance_number %} {{ file.attendance_number }} {% else %} - {% endif %}</td>
-                                        <td>{% if file.date_in %} {{ file.date_in|date:"d/m/Y" }} {% else %} - {% endif %}</td>
-                                        <td>{%if file.tipo_documento%} {%if  file.tipo_documento == 'd' %} Digitalizado {% elif file.tipo_documento == 'p' %}  Prontuário {% else %} - {% endif %}{% endif %}</td>
-                                        <td>{% if file.uti %} {{ file.uti }} {% else %} - {% endif %}</td>
-                                        <td>{% if file.sector %} {{ file.sector }} {% else %} - {% endif %}</td>
-                                        <th scope="row" style="color: black">
+                                        <td>
+                                            {% if file.name %} 
+                                                {{ file.name }} 
+                                            {% else %} - {% endif %}</td>
+                                        <td>
+                                            {% if file.nr_cpf %}
+                                                {{ file.nr_cpf }}
+                                            {% else %} - {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if file.medical_records_number %}
+                                                {{ file.medical_records_number }}
+                                            {% else %} - {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if file.attendance_number %}
+                                                {{ file.attendance_number }} 
+                                            {% else %} - {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if file.date_in %}
+                                                {{ file.date_in|date:"d/m/Y - H:i" }}
+                                            {% else %} - {% endif %} 
+                                        </td>
+                                        <td>
+                                            {%if file.tipo_documento%} 
+                                                {%if  file.tipo_documento == 'd' %}
+                                                    Digitalizado
+                                                {% elif file.tipo_documento == 'p' %}
+                                                    Prontuário 
+                                                {% else %} - {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if file.uti %} 
+                                                {{ file.uti }} 
+                                            {% else %} - {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if file.sector %}
+                                                {{ file.sector }} 
+                                            {% else %} - {% endif %}
+                                        </td>
+                                        <td scope="row" style="color: black">
                                             <a class="glyphicon-link" href="{{ file.url }}" target="_blank">
                                                 <svg width="2em" height="1.5em" viewBox="0 0 16 16"
                                                     class="bi bi-file-earmark-arrow-down" fill="currentColor"
@@ -185,7 +226,12 @@
                                                         d="M8 6a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4A.5.5 0 0 1 8 6z"></path>
                                                 </svg>
                                             </a>
-                                        </th>
+                                        </td>
+                                        <td>
+                                            {% if file.updated_at %}
+                                                    {{file.updated_at|date:"d/m/Y - H:i"}}
+                                            {% else %} - {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

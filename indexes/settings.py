@@ -220,13 +220,12 @@ EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
 PATH_FILES = "/srv/ftp/"
 PATH_IOP = "ftp-iop/"
-PATH_TASY_IOP = "tasy-iop/"
 
-PATH_MOVE_FILES_TO = BASE_DIR+MEDIA_URL
+PATH_MOVE_FILES_TO = BASE_DIR + MEDIA_URL
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 
-TIME_TO_READ_FILES = 3600 # in seconds
+TIME_TO_READ_FILES = 3600  # in seconds
 
 sentry_sdk.init(
     dsn="https://325040ee2bc74f4a8180b2a0a48ed354@o530031.ingest.sentry.io/5660306",

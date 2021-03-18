@@ -5,6 +5,7 @@ from core.choices import IndexedFileChoices
 
 class Location(models.Model):
     location = models.CharField('Estabelecimento', max_length=255, unique=True)
+    path = models.CharField('Caminho da pasta', max_length=255, unique=True, blank=True, null=True)
 
     created_at = models.DateTimeField('Criado em:', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em:', auto_now=True)
@@ -60,8 +61,7 @@ class IndexedFileModel(models.Model):
     date_file = models.DateTimeField('Data do arquivo', null=True, blank=True)
     sex = models.CharField('Sexo', max_length=20, blank=True, null=True)
     health_insurance = models.ForeignKey(HealthInsurance, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')
-    sector = models.CharField('Setor', max_length=255, null=True, blank=True)
-    # sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING, related_name='indexfiles')
+    sector = models.ForeignKey(Sector, on_delete=models.DO_NOTHING, related_name='indexfiles', null=True, blank=True)
     attendance_number = models.CharField('Número do atendimento', max_length=255, null=True, blank=True)
     uti = models.CharField('Número do leito', max_length=255, null=True, blank=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.DO_NOTHING, related_name='indexfiles')

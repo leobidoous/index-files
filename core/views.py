@@ -183,9 +183,9 @@ class HomeView(ListView, LoginRequiredMixin):
             if sector_nr == 0:
                 qs = IndexedFileModel.objects.filter(location__id__in=locations).all().order_by("-date_file")
             else:
-                sector_name = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get().sector_name
+                sector = locations_user.filter(id__in=locations).filter(sectors__id=sector_nr).first().sectors.filter(id=sector_nr).get()
                 qs = IndexedFileModel.objects.filter(location__id__in=locations,
-                                                     sector__iexact=sector_name).all().order_by("-date_file")
+                                                     sector=sector.pk).all().order_by("-date_file")
             if self.filters['name']:
                 qs = qs.filter(name__contains=self.filters['name'])
             if self.filters['birth']:
@@ -205,7 +205,7 @@ class HomeView(ListView, LoginRequiredMixin):
             if self.filters['tipo_documento']:
                 qs = qs.filter(tipo_documento__iexact=self.filters['tipo_documento'])
 
-            return qs
+            return qs.filter(health_insurance_id__in=health_insurance).order_by('name')
         return super(HomeView, self).get_queryset()
 
 
