@@ -222,6 +222,7 @@ PATH_FILES = "/srv/ftp/"
 PATH_IOP = "ftp-iop/"
 
 PATH_MOVE_FILES_TO = BASE_DIR + MEDIA_URL
+PATH_MOVE_FILES_TO_LOCAL = PATH_MOVE_FILES_TO + 'local/'
 
 URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
 

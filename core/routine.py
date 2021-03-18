@@ -22,7 +22,6 @@ from qrcode.models import DocumentModel
 
 def processar_digitalizado_iop():
     path = settings.PATH_FILES + settings.PATH_IOP
-    move_to = settings.PATH_MOVE_FILES_TO
     files_pdf = glob.glob(path + "*.pdf")
 
     for pdf_path in files_pdf:
@@ -30,12 +29,20 @@ def processar_digitalizado_iop():
 
         qr_code = ManageQrCode(pdf_path)
         decoded_text = qr_code.get_decoded_text()
+
+        try:
+            shutil.copyfile(path + filter_name,
+                            settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'digitalizado/' + filter_name)
+
+            shutil.move(path + filter_name,
+                        settings.PATH_MOVE_FILES_TO + settings.PATH_IOP + 'digitalizado/' + filter_name)
+        except FileNotFoundError:
+            pass
+
         if decoded_text is None:
             # Ignora o resto da iteração caso o QR Code não tenha sido identificado ou não exista
             continue
-
         print(decoded_text)
-
 
         codes = decoded_text.split('-')
         nr_atendimento = codes[1]
@@ -50,24 +57,6 @@ def processar_digitalizado_iop():
             # Cria um setor, location e health insurance.
             # Baseado no nome do setor de atendimento ou obtém um se já existir com esse nome
             location, created = Location.objects.get_or_create(location=patient.ds_estabelecimento)
-
-            if not location.path:
-                location.path = location.location.lower().replace(' ', '_') + "/"
-                location.save()
-                location_path_move = os.path.join(move_to, 'digitalizado', location.path)
-                if not os.path.exists(location_path_move):
-                    os.makedirs(location_path_move)
-            else:
-                location_path_move = os.path.join(move_to, 'digitalizado', location.path)
-
-            try:
-                shutil.move(path + filter_name,
-                            location_path_move + filter_name)
-                print("Movida")
-            except Exception as e:
-                print(e)
-                pass
-
             sector, created = Sector.objects.get_or_create(sector_name=patient.ds_setor_atendimento, location=location)
             health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=patient.ds_convenio)
 
@@ -146,10 +135,14 @@ def processar_prontuario_iop():
         fh.close()
 
         text = file_handle.getvalue()
+        try:
+            shutil.copyfile(fh.name,
+                            settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf')
 
+            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf')
+        except Exception as e:
+            pass
         text = text.split('Profissional')[0].split('\n')
-
-        move_to = settings.PATH_MOVE_FILES_TO
 
         try:
             indexed_file_dict = {
@@ -182,32 +175,10 @@ def processar_prontuario_iop():
 
             if text[29]:
                 location, created = Location.objects.get_or_create(location=text[29])
-                # Se não existir location.path, então é criada uma baseada no nome do estabelecimento (que é único)
-                if not location.path:
-                    # o caminho da pasta é criado baseado e:
-                    # - nome da location minúsculo;
-                    # - com _ ao invés de espaços e barra no fim
-                    location.path = location.location.lower().replace(' ', '_') + "/"
-                    location.save()
-                    # Caso ainda não exista uma pasta com este nome, então ela é criada
-                    if not os.path.exists(os.path.join(move_to + 'prontuario/' + location.path)):
-                        os.makedirs(os.path.join(move_to + 'prontuario/' + location.path))
-
-                # Movemos o arquivo para a pasta da location
-                shutil.move(fh.name, move_to + 'prontuario/' + location.path + path.stem + '.pdf')
                 indexed_file_dict['location'] = location.pk
                 if text[18]:
                     sector, created = Sector.objects.get_or_create(location=location, sector_name=text[18])
                     indexed_file_dict['sector'] = sector.pk
-            else:
-                # Caso uma location não seja identificada,
-                # o arquivo é movido para uma pasta sem identificação se localização
-                no_location_path = os.path.join(move_to + 'prontuario/' + 'no_location/')
-                if not os.path.exists(no_location_path):
-                    os.makedirs(no_location_path)
-
-                # Movemos o arquivo para a pasta que não tem location
-                shutil.move(fh.name, no_location_path + path.stem + '.pdf')
 
             if text[17]:
                 health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=text[17])
