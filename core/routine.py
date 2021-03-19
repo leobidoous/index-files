@@ -171,7 +171,7 @@ def processar_prontuario_iop():
                     indexed_file_dict['attendance_number'] = indexed_file_dict['attendance_number'][0]
                 # Filtra por attendance_number
                 if indexed:
-                    indexed.filter(attendance_number=indexed_file_dict['attendance_number'])
+                    indexed = indexed.filter(attendance_number=indexed_file_dict['attendance_number'])
 
             if text[29]:
                 location, created = Location.objects.get_or_create(location=text[29])
