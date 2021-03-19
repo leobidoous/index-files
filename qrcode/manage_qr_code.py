@@ -1,14 +1,20 @@
+import logging
+from base64 import b64encode
+from sys import platform
+
+import cv2
+import io
+import numpy as np
+import os
+import pyzbar.pyzbar as pyzbar
+import timeit
+from PIL import Image
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.utils import PyPdfError
-from pdf2image import convert_from_bytes
 from django.conf import settings
-import cv2, os, io, timeit, glob, shutil
-import logging
-import numpy as np
-from sys import platform
-from PIL import Image
-import pyzbar.pyzbar as pyzbar
-from base64 import b64encode, b64decode
+from pdf2image import convert_from_bytes
+
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
 
 
 class ManageQrCode:
@@ -36,6 +42,8 @@ class ManageQrCode:
             self.run()
         except PyPdfError:
             raise PyPdfError
+        except FileNotFoundError:
+            logging.warning(f"Arquivo {pdf_path} não encontrado!")
 
     def run(self):
         start = timeit.default_timer()
@@ -48,6 +56,8 @@ class ManageQrCode:
                         self.reader = PdfFileReader(self.pdf_path)
                     except PyPdfError:
                         raise PyPdfError
+                    except FileNotFoundError:
+                        raise FileNotFoundError
 
                     self.cut_region(side=side, rotate=rotate, region=region)
                     self.save_cropped_bytes_pdf()
