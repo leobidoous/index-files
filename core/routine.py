@@ -84,7 +84,7 @@ def processar_digitalizado_iop():
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + "iop/" + filter_name,
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_IOP + 'digitalizado/' + filter_name,
                 'tipo_documento': 'd',
             }
             try:
@@ -156,7 +156,7 @@ def processar_prontuario_iop():
                 'date_in': datetime.strptime(text[16], '%d/%m/%Y %H:%M:%S'),
                 'date_file': datetime.strptime(text[60], '%d/%m/%Y'),
                 'uti': text[19],
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + path.stem + '.pdf',
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf',
                 'tipo_documento': 'p',
             }
 
