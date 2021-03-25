@@ -17,7 +17,6 @@ from core.api.v1.serializers.indexed_file import IndexedFileSerializer
 from core.models import Location, HealthInsurance, IndexedFileModel, Sector
 from core.models import TasyPatient
 from qrcode.manage_qr_code import ManageQrCode
-from qrcode.models import DocumentModel
 
 
 def processar_digitalizado_iop():
@@ -30,12 +29,14 @@ def processar_digitalizado_iop():
         qr_code = ManageQrCode(pdf_path)
         decoded_text = qr_code.get_decoded_text()
 
+        caminho_base = settings.PATH_IOP + 'digitalizado/' + filter_name
+
         try:
             shutil.copyfile(path + filter_name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'digitalizado/' + filter_name)
+                            settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
             shutil.move(path + filter_name,
-                        settings.PATH_MOVE_FILES_TO + settings.PATH_IOP + 'digitalizado/' + filter_name)
+                        settings.PATH_MOVE_FILES_TO + caminho_base)
         except FileNotFoundError:
             pass
 
@@ -70,6 +71,8 @@ def processar_digitalizado_iop():
                 # Pega o último atualizado (por precaução)
                 indexed = indexed.order_by('-updated_at').first()
 
+
+
             # Payload do IndexFile
             indexed_file_dict = {
                 'name': patient.ds_pessoa_fisica,
@@ -81,6 +84,7 @@ def processar_digitalizado_iop():
                 'attendance_number': patient.nr_atendimento,
                 'location': location.pk,
                 'date_in': patient.dt_entrada,
+                'date_file': datetime.now(),
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
@@ -135,11 +139,12 @@ def processar_prontuario_iop():
         fh.close()
 
         text = file_handle.getvalue()
+        caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
         try:
             shutil.copyfile(fh.name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf')
+                            settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf')
+            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
         except Exception as e:
             pass
         text = text.split('Profissional')[0].split('\n')
@@ -156,7 +161,7 @@ def processar_prontuario_iop():
                 'date_in': datetime.strptime(text[16], '%d/%m/%Y %H:%M:%S'),
                 'date_file': datetime.strptime(text[60], '%d/%m/%Y'),
                 'uti': text[19],
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf',
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + caminho_base,
                 'tipo_documento': 'p',
             }
 
@@ -188,11 +193,16 @@ def processar_prontuario_iop():
                 if indexed:
                     # Se existir uma query, então pega o último e atualiza
                     indexed = indexed.order_by('-updated_at').first()
+                    arquivo_anterior = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed, data=indexed_file_dict, partial=True)
                 else:
+                    arquivo_anterior = None
                     indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
                 indexed_file_serializer.is_valid(raise_exception=True)
                 indexed_file_serializer.save()
+
+                if arquivo_anterior:
+                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
             except Exception as e:
                 print(e)
 
