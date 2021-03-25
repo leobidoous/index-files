@@ -126,8 +126,99 @@ def processar_digitalizado_iop():
             pass
 
 
-def processar_prontuario_iop():
-    for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
+def processar_digitalizado_domed():
+    path = settings.PATH_FILES + settings.PATH_DOMED
+    files_pdf = glob.glob(path + "*.pdf")
+
+    for pdf_path in files_pdf:
+        filter_name = os.path.split(pdf_path)[1]
+
+        qr_code = ManageQrCode(pdf_path)
+        decoded_text = qr_code.get_decoded_text()
+
+        caminho_base = settings.PATH_DOMED + 'digitalizado/' + filter_name
+
+        try:
+            # shutil.copyfile(path + filter_name,
+            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+            shutil.move(path + filter_name,
+                        settings.PATH_MOVE_FILES_TO + caminho_base)
+        except FileNotFoundError:
+            pass
+
+        if decoded_text is None:
+            # Ignora o resto da iteração caso o QR Code não tenha sido identificado ou não exista
+            continue
+        print(decoded_text)
+
+        codes = decoded_text.split('-')
+        nr_atendimento = codes[1]
+        payload = {'nr_atendimento': nr_atendimento}
+
+        try:
+            patient = TasyPatient.objects.using('tasy_erp').get(nr_atendimento=int(nr_atendimento))
+            payload['patient'] = patient
+
+            ######### Inserindo dados do paciente aqui #################
+
+            # Cria um setor, location e health insurance.
+            # Baseado no nome do setor de atendimento ou obtém um se já existir com esse nome
+            location, created = Location.objects.get_or_create(location=patient.ds_estabelecimento)
+            sector, created = Sector.objects.get_or_create(sector_name=patient.ds_setor_atendimento, location=location)
+            health_insurance, created = HealthInsurance.objects.get_or_create(health_insurance=patient.ds_convenio)
+
+            # Tenta encontrar um arquivo pré existente para efetuar um update nele (caso exista)
+            indexed = IndexedFileModel.objects.filter(name=patient.ds_pessoa_fisica,
+                                                      nr_cpf=patient.nr_cpf,
+                                                      attendance_number=patient.nr_atendimento,
+                                                      medical_records_number=patient.nr_prontuario,)
+
+            if indexed:
+                # Pega o último atualizado (por precaução)
+                indexed = indexed.order_by('-updated_at').first()
+
+
+
+            # Payload do IndexFile
+            indexed_file_dict = {
+                'name': patient.ds_pessoa_fisica,
+                'filename': filter_name,
+                'nr_cpf': patient.nr_cpf,
+                'medical_records_number': patient.nr_prontuario,
+                'health_insurance': health_insurance.pk,
+                'sector': sector.pk,
+                'attendance_number': patient.nr_atendimento,
+                'location': location.pk,
+                'date_in': patient.dt_entrada,
+                'date_file': datetime.now(),
+                'uti': patient.cd_unidade,
+                'birth': patient.dt_nascimento,
+                'sex': patient.ie_sexo,
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_DOMED + 'digitalizado/' + filter_name,
+                'tipo_documento': 'd',
+            }
+            try:
+                if indexed:
+                    indexed_file_serializer = IndexedFileSerializer(instance=indexed,
+                                                                    data=indexed_file_dict,
+                                                                    partial=True)
+                else:
+                    indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
+
+                indexed_file_serializer.is_valid(raise_exception=True)
+                indexed_file_serializer.save()
+            except Exception as e:
+                print(repr(e))
+
+        except TasyPatient.DoesNotExist:
+            pass
+
+
+def processar_prontuarios():
+    # prontuários sem qrcode de todas as unidades são processados aqui
+
+    for index, path in enumerate(pathlib.Path(settings.PATH_ORIGINAL).iterdir()):
         # start = time.time()
         file_handle = StringIO()
         manager = PDFResourceManager()
@@ -141,8 +232,9 @@ def processar_prontuario_iop():
         text = file_handle.getvalue()
         caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
         try:
-            shutil.copyfile(fh.name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+            # por enquanto não será necessário
+            # shutil.copyfile(fh.name,
+            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
             shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
         except Exception as e:
@@ -214,6 +306,7 @@ def processar_prontuario_iop():
 def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(processar_digitalizado_iop, 'interval', seconds=settings.TIME_TO_READ_FILES,)
-    scheduler.add_job(processar_prontuario_iop, 'interval', seconds=settings.TIME_TO_READ_FILES, )
+    scheduler.add_job(processar_digitalizado_domed, 'interval', seconds=settings.TIME_TO_READ_FILES,)
+    scheduler.add_job(processar_prontuarios, 'interval', seconds=settings.TIME_TO_READ_FILES, )
 
     scheduler.start()
