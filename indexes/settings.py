@@ -32,6 +32,7 @@ SECRET_KEY = 'qz2y0%mfa5n&azpkd1t$g6$k8%=)8s6$idc34u_u!8@ds3kz3q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# É preciso ter http ou https no SITE_NAME
 SITE_NAME = 'https://prontuario.ahlabs.net'
 
 ALLOWED_HOSTS = ['prontuario.ahlabs.net',
