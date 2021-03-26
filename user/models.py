@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 import uuid
 import re
-from core.models import Location, HealthInsurance
+from core.models import Estabelecimento, Convenio
 from django.contrib.auth.hashers import identify_hasher
 
 
@@ -28,11 +28,11 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField('Time', default=False)
     is_active = models.BooleanField('Usuário Ativo', default=True)
     is_superuser = models.BooleanField('Super Usuário', default=False)
-    date_joined = models.DateTimeField('Criado em:', auto_now_add=True)
-    last_update = models.DateTimeField('Atualizado em:', auto_now=True)
+    criado_em = models.DateTimeField('Criado em:', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em:', auto_now=True)
 
-    locations = models.ManyToManyField(Location, related_name='users', blank=True)
-    health_insurances = models.ManyToManyField(HealthInsurance, related_name='users', blank=True)
+    estabelecimentos = models.ManyToManyField(Estabelecimento, related_name='users', blank=True)
+    convenios = models.ManyToManyField(Convenio, related_name='users', blank=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']

@@ -2,40 +2,41 @@ from django.contrib import admin
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 
-from core.api.v1.forms.indexed_file import IndexedFilerForm
-from core.models import IndexedFileModel, Location, HealthInsurance, Sector, Patient
+from core.api.v1.forms import ArquivoIndexadoForm
+from core.models import Estabelecimento, Setor, ArquivoIndexado, Paciente, Convenio
 
 
-class IndexedFilerAdmin(admin.ModelAdmin):
-    form = IndexedFilerForm
-    fields = ['name', 'nr_cpf', 'sex', 'birth', 'medical_records_number', 'date_in', 'health_insurance', 'location',
-              'sector', 'tipo_documento', 'attendance_number', 'uti', 'url']
+class ArquivoIndexadoAdmin(admin.ModelAdmin):
+    form = ArquivoIndexadoForm
+    fields = ['nome', 'cpf', 'genero', 'data_nascimento', 'numero_prontuario', 'data_entrada', 'convenio', 'setor',
+              'numero_atendimento', 'uti', 'url', 'tipo_documento']
 
     def save_model(self, request, obj, form, change):
         try:
-            super(IndexedFilerAdmin, self).save_model(request, obj, form, change)
+            super(ArquivoIndexadoAdmin, self).save_model(request, obj, form, change)
         except ValidationError:
             messages.add_message(request, messages.ERROR, 'O usuário não foi salvo')
         # super(IndexedFilerAdmin, self).save_model(request, obj, form, change)
 
 
-class LocationAdmin(admin.ModelAdmin):
+class EstabelecimentoAdmin(admin.ModelAdmin):
     pass
 
 
-class HealthInsuranceAdmin(admin.ModelAdmin):
+class ConvenioAdmin(admin.ModelAdmin):
     pass
 
 
-class SectorAdmin(admin.ModelAdmin):
-    pass
-
-class PatientAdmin(admin.ModelAdmin):
+class SetorAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(IndexedFileModel, IndexedFilerAdmin)
-admin.site.register(Location, LocationAdmin)
-admin.site.register(HealthInsurance, HealthInsuranceAdmin)
-admin.site.register(Sector, SectorAdmin)
-admin.site.register(Patient, PatientAdmin)
+class PacienteAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(ArquivoIndexado, ArquivoIndexadoAdmin)
+admin.site.register(Estabelecimento, EstabelecimentoAdmin)
+admin.site.register(Convenio, ConvenioAdmin)
+admin.site.register(Setor, SetorAdmin)
+admin.site.register(Paciente, PacienteAdmin)

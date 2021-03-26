@@ -25,48 +25,53 @@
     <link href="{% static 'css/normalize.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
+    <script src="{% static 'js/omni-file-indexer.js' %}"></script>
+    <script src="{% static 'js/first-direflow-project.js' %}"></script>
+
+
+
 </head>
 
 <body id="page-top">
 
 
 <!-- Navbar -->
-<nav id="navegation" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav id="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
 
-{#    <button class="btn btn-info" style="text-align: center; display: flex">#}
-{#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0" href="{% url 'core:home' %}">#}
-{#            <span>Procurar Arquivos</span>#}
-{#        </a>#}
-{#    </button>#}
-{#    <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">#}
-{#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"#}
-{#           href="{% url 'edok:buscar_documento' %}">#}
-{#            <span>Buscar eDok</span>#}
-{#        </a>#}
-{#    </button>#}
-{##}
-{#    <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">#}
-{#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"#}
-{#           href="{% url 'qrcode:QR Code View' %}">#}
-{#            <span>Detectar QR Code</span>#}
-{#        </a>#}
-{#    </button>#}
+    {#    <button class="btn btn-info" style="text-align: center; display: flex">#}
+    {#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0" href="{% url 'core:home' %}">#}
+    {#            <span>Procurar Arquivos</span>#}
+    {#        </a>#}
+    {#    </button>#}
+    {#    <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">#}
+    {#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"#}
+    {#           href="{% url 'edok:buscar_documento' %}">#}
+    {#            <span>Buscar eDok</span>#}
+    {#        </a>#}
+    {#    </button>#}
+    {##}
+    {#    <button class="btn btn-info" style="text-align: center; display: flex; margin-left: 10px">#}
+    {#        <a class="navbar-brand" style="text-align: center; color: white; margin-right: 0"#}
+    {#           href="{% url 'qrcode:QR Code View' %}">#}
+    {#            <span>Detectar QR Code</span>#}
+    {#        </a>#}
+    {#    </button>#}
     <h3>AmhDok</h3>
 
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" style="margin-left: 10px" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-{#            {% if user.is_authenticated and user.is_superuser %}#}
-{#                <li class="nav-item active">#}
-{#                    <a class="btn btn-outline-info form-navbar" target="_blank" href="/admin">ADM<span#}
-{#                            class="sr-only">(current)</span></a>#}
-{#                </li>#}
-{#            {% endif %}#}
+            {#            {% if user.is_authenticated and user.is_superuser %}#}
+            {#                <li class="nav-item active">#}
+            {#                    <a class="btn btn-outline-info form-navbar" target="_blank" href="/admin">ADM<span#}
+            {#                            class="sr-only">(current)</span></a>#}
+            {#                </li>#}
+            {#            {% endif %}#}
         </ul>
         <form class="form-inline my-2 my-lg-0">
             {% if user.is_authenticated %}
@@ -83,20 +88,23 @@
 
 <!-- body -->
 <div id="content">
-    {% block content %}
-    {% endblock %}
+    {% if user.is_authenticated %}
+        {% block content %}
+        {% endblock %}
+    {% else %}
+        <meta http-equiv="REFRESH" content="0; url={% url 'core:login' %}">
+    {% endif %}
 
 </div>
 
 <!-- Footer -->
-<footer style="bottom: 0; left: 0; right: 0;" id="footer">
+<footer id="footer">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 copyright">
+        <div class="d-flex flex-row justify-content-between flex-wrap">
+            <div class="copyright">
                 <span>Copyright &copy; iTech Ltda.</span>
             </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4 quicklinks">
+            <div class="quicklinks">
                 <ul class="list-inline">
                     <li class="list-inline-item">
                         <a href="#">Política de Privacidade</a>

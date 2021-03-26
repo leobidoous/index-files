@@ -20,5 +20,5 @@ from .v1 import urls
 # app_name = 'api'
 
 urlpatterns = [
-    path('v1/', include(urls))
+    path('v1/', include(urls)),
 ]

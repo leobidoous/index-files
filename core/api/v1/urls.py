@@ -1,14 +1,19 @@
 from django.urls import include, path
-from rest_framework import routers
+from rest_framework_nested import routers
 
-from user.views import UserViewSet
+from core.api.v1.views import ArquivoIndexadoViewSet, SetorViewSet, EstabelecimentoViewSet
 
-app_name = 'v1'
+# app_name = 'v1'
 
 router = routers.DefaultRouter()
-router.register('users', UserViewSet, basename='Usuários')
+router.register('arquivo_indexado', ArquivoIndexadoViewSet, basename='arquivo_indexado')
+router.register('estabelecimento', EstabelecimentoViewSet, basename='estabelecimento')
+estabelecimento_router = routers.NestedSimpleRouter(router, 'estabelecimento', lookup='estabelecimento')
+estabelecimento_router.register('setor', SetorViewSet, basename='setor')
+
 
 urlpatterns = [
-    path('', include(router.urls), name='endpoints'),
+    path('', include(router.urls)),
+    path('', include(estabelecimento_router.urls), name='estabelecimento'),
     path('', include('authentication.urls'), name='authentication'),
 ]

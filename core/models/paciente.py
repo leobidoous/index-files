@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Patient(models.Model):
+class Paciente(models.Model):
     cd_empresa = models.PositiveIntegerField(null=True, blank=True)
     ds_empresa = models.CharField(max_length=255, null=True, blank=True)
     cd_estabelecimento = models.PositiveIntegerField(null=True, blank=True)
@@ -16,6 +16,8 @@ class Patient(models.Model):
     cd_setor_atendimento = models.PositiveIntegerField(null=True, blank=True)
     ds_setor_atendimento = models.CharField(max_length=255, null=True, blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'paciente'
