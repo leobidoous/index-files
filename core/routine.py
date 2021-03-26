@@ -219,21 +219,10 @@ def processar_prontuarios():
 
         text = file_handle.getvalue()
         caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
-        try:
-            # por enquanto não será necessário
-            # shutil.copyfile(fh.name,
-            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
-        except Exception as e:
-            pass
         text = text.split('Profissional')[0].split('\n')
 
         try:
-            if settings.DEBUG:
-                prefixo = 'http://'
-            else:
-                prefixo = 'https://'
             arquivo_indexado_dict = {
                 'nome_arquivo': path.name,
                 'nome': text[55],
@@ -291,9 +280,17 @@ def processar_prontuarios():
 
                 if arquivo_anterior:
                     os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
-
             except Exception as e:
                 repr(e)
+
+            try:
+                # por enquanto não será necessário
+                # shutil.copyfile(fh.name,
+                #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+                shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
+            except Exception as e:
+                pass
 
         except Exception as e:
             repr(e)
