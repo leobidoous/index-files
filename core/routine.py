@@ -28,8 +28,8 @@ def processar_digitalizado_iop():
         decoded_text = qr_code.get_decoded_text()
 
         try:
-            shutil.copyfile(path + filter_name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'digitalizado/' + filter_name)
+            # shutil.copyfile(path + filter_name,
+            #                 settings.PATH_MOVE_FILES_TO_LOCAL + settings.PATH_IOP + 'digitalizado/' + filter_name)
 
             shutil.move(path + filter_name,
                         settings.PATH_MOVE_FILES_TO + settings.PATH_IOP + 'digitalizado/' + filter_name)
@@ -95,6 +95,7 @@ def processar_digitalizado_iop():
                                                                                    data=arquivo_indexado_dict,
                                                                                    partial=True)
 
+                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
                 else:
                     arquivo_anterior = None
                     arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
@@ -102,8 +103,8 @@ def processar_digitalizado_iop():
                 arquivo_indexado_serializer.is_valid(raise_exception=True)
                 arquivo_indexado_serializer.save()
 
-                if arquivo_anterior:
-                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+                # if arquivo_anterior:
+                #     os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
 
             except Exception as e:
                 print(repr(e))
@@ -127,8 +128,8 @@ def processar_prontuario_iop():
         text = file_handle.getvalue()
         caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
         try:
-            shutil.copyfile(fh.name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+            # shutil.copyfile(fh.name,
+            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
             shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
         except Exception as e:
@@ -185,15 +186,14 @@ def processar_prontuario_iop():
                                                                                data=arquivo_indexado_dict,
                                                                                partial=True)
 
-                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
                 else:
                     arquivo_anterior = None
                     indexed_file_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
                 indexed_file_serializer.is_valid(raise_exception=True)
                 indexed_file_serializer.save()
 
-                if arquivo_anterior:
-                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+                # if arquivo_anterior:
+                #     os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
 
             except Exception as e:
                 repr(e)
