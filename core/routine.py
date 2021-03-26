@@ -236,6 +236,15 @@ def processar_prontuarios():
         text = text.split('Profissional')[0].split('\n')
 
         try:
+            # por enquanto não será necessário
+            # shutil.copyfile(fh.name,
+            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
+        except Exception as e:
+            pass
+
+        try:
             indexed_file_dict = {
                 'filename': path.name,
                 'name': text[55],
@@ -281,6 +290,9 @@ def processar_prontuarios():
                     indexed = indexed.order_by('-updated_at').first()
                     arquivo_anterior = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed, data=indexed_file_dict, partial=True)
+
+                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+
                 else:
                     arquivo_anterior = None
                     indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
@@ -292,15 +304,6 @@ def processar_prontuarios():
 
             except Exception as e:
                 print(e)
-
-            try:
-                # por enquanto não será necessário
-                # shutil.copyfile(fh.name,
-                #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
-
-                shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
-            except Exception as e:
-                pass
 
         except Exception as e:
             print(e)
