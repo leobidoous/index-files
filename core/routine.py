@@ -118,7 +118,7 @@ def processar_digitalizado_iop():
                 uti=patient.cd_unidade,
                 birth=patient.dt_nascimento,
                 sex=patient.ie_sexo,
-                url='https://' + settings.SITE_NAME + settings.MEDIA_URL + "iop/" + filter_name,
+                url='https://' + settings.SITE_NAME + settings.MEDIA_URL + "ftp-iop/" + filter_name,
                 tipo_documento='d',
             )
             '''
