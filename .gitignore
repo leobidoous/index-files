@@ -122,6 +122,6 @@ files/
 !**/migrations/__init__.py
 
 # media
-/media/
+#/media/
 
 qrcode_fixture.json
