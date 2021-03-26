@@ -31,14 +31,6 @@ def processar_digitalizado_iop():
 
         caminho_base = settings.PATH_IOP + 'digitalizado/' + filter_name
 
-        try:
-            shutil.copyfile(path + filter_name,
-                            settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
-
-            shutil.move(path + filter_name,
-                        settings.PATH_MOVE_FILES_TO + caminho_base)
-        except FileNotFoundError:
-            pass
 
         if decoded_text is None:
             # Ignora o resto da iteração caso o QR Code não tenha sido identificado ou não exista
@@ -70,8 +62,6 @@ def processar_digitalizado_iop():
             if indexed:
                 # Pega o último atualizado (por precaução)
                 indexed = indexed.order_by('-updated_at').first()
-
-
 
             # Payload do IndexFile
             indexed_file_dict = {
@@ -122,6 +112,15 @@ def processar_digitalizado_iop():
                 tipo_documento='d',
             )
             '''
+
+            try:
+                # shutil.copyfile(path + filter_name,
+                #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+                shutil.move(path + filter_name,
+                            settings.PATH_MOVE_FILES_TO + caminho_base)
+            except FileNotFoundError:
+                pass
         except TasyPatient.DoesNotExist:
             pass
 
@@ -138,14 +137,7 @@ def processar_digitalizado_domed():
 
         caminho_base = settings.PATH_DOMED + 'digitalizado/' + filter_name
 
-        try:
-            # shutil.copyfile(path + filter_name,
-            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-            shutil.move(path + filter_name,
-                        settings.PATH_MOVE_FILES_TO + caminho_base)
-        except FileNotFoundError:
-            pass
 
         if decoded_text is None:
             # Ignora o resto da iteração caso o QR Code não tenha sido identificado ou não exista
@@ -211,6 +203,15 @@ def processar_digitalizado_domed():
             except Exception as e:
                 print(repr(e))
 
+            try:
+                # shutil.copyfile(path + filter_name,
+                #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+                shutil.move(path + filter_name,
+                            settings.PATH_MOVE_FILES_TO + caminho_base)
+            except FileNotFoundError:
+                pass
+
         except TasyPatient.DoesNotExist:
             pass
 
@@ -218,7 +219,7 @@ def processar_digitalizado_domed():
 def processar_prontuarios():
     # prontuários sem qrcode de todas as unidades são processados aqui
 
-    for index, path in enumerate(pathlib.Path(settings.PATH_ORIGINAL).iterdir()):
+    for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
         file_handle = StringIO()
         manager = PDFResourceManager()
@@ -231,14 +232,7 @@ def processar_prontuarios():
 
         text = file_handle.getvalue()
         caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
-        try:
-            # por enquanto não será necessário
-            # shutil.copyfile(fh.name,
-            #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-            shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
-        except Exception as e:
-            pass
         text = text.split('Profissional')[0].split('\n')
 
         try:
@@ -295,8 +289,18 @@ def processar_prontuarios():
 
                 if arquivo_anterior:
                     os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+
             except Exception as e:
                 print(e)
+
+            try:
+                # por enquanto não será necessário
+                # shutil.copyfile(fh.name,
+                #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
+
+                shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
+            except Exception as e:
+                pass
 
         except Exception as e:
             print(e)
@@ -306,7 +310,7 @@ def processar_prontuarios():
 def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(processar_digitalizado_iop, 'interval', seconds=settings.TIME_TO_READ_FILES,)
-    scheduler.add_job(processar_digitalizado_domed, 'interval', seconds=settings.TIME_TO_READ_FILES,)
+    # scheduler.add_job(processar_digitalizado_domed, 'interval', seconds=settings.TIME_TO_READ_FILES,)
     scheduler.add_job(processar_prontuarios, 'interval', seconds=settings.TIME_TO_READ_FILES, )
 
     scheduler.start()
