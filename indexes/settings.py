@@ -229,7 +229,7 @@ LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
-PATH_ORIGINAL = "/mnt/tasyschedulerweb/"
+PATH_PRONTUARIOS = "/mnt/tasyschedulerweb/"
 PATH_FILES = "/srv/ftp/"
 PATH_IOP = "ftp-iop/"
 PATH_DOMED = "ftp-domed/"
