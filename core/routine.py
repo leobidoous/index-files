@@ -20,7 +20,9 @@ from qrcode.manage_qr_code import ManageQrCode
 
 
 def processar_digitalizado_iop():
-    path = settings.PATH_FILES + settings.PATH_IOP
+    directory = settings.PATH_IOP
+    path = settings.PATH_FILES + directory
+
     files_pdf = glob.glob(path + "*.pdf")
 
     for pdf_path in files_pdf:
@@ -29,7 +31,7 @@ def processar_digitalizado_iop():
         qr_code = ManageQrCode(pdf_path)
         decoded_text = qr_code.get_decoded_text()
 
-        caminho_base = settings.PATH_IOP + 'digitalizado/' + filter_name
+        caminho_base = directory + 'digitalizado/' + filter_name
 
 
         if decoded_text is None:
@@ -78,7 +80,7 @@ def processar_digitalizado_iop():
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_IOP + 'digitalizado/' + filter_name,
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
                 'tipo_documento': 'd',
             }
             try:
@@ -126,7 +128,11 @@ def processar_digitalizado_iop():
 
 
 def processar_digitalizado_domed():
-    path = settings.PATH_FILES + settings.PATH_DOMED
+    # O diretório precisa ser definido aqui
+
+    directory = settings.PATH_DOMED
+    path = settings.PATH_FILES + directory
+
     files_pdf = glob.glob(path + "*.pdf")
 
     for pdf_path in files_pdf:
@@ -135,8 +141,7 @@ def processar_digitalizado_domed():
         qr_code = ManageQrCode(pdf_path)
         decoded_text = qr_code.get_decoded_text()
 
-        caminho_base = settings.PATH_DOMED + 'digitalizado/' + filter_name
-
+        caminho_base = directory + 'digitalizado/' + filter_name
 
 
         if decoded_text is None:
@@ -170,8 +175,6 @@ def processar_digitalizado_domed():
                 # Pega o último atualizado (por precaução)
                 indexed = indexed.order_by('-updated_at').first()
 
-
-
             # Payload do IndexFile
             indexed_file_dict = {
                 'name': patient.ds_pessoa_fisica,
@@ -187,7 +190,7 @@ def processar_digitalizado_domed():
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + settings.PATH_DOMED + 'digitalizado/' + filter_name,
+                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
                 'tipo_documento': 'd',
             }
             try:
@@ -203,6 +206,25 @@ def processar_digitalizado_domed():
             except Exception as e:
                 print(repr(e))
 
+            '''
+            IndexedFileModel.objects.get_or_create(
+                name=patient.ds_pessoa_fisica,
+                filename=filter_name,
+                nr_cpf=patient.nr_cpf,
+                medical_records_number=patient.nr_prontuario,
+                health_insurance=health_insurance,
+                sector=patient.ds_setor_atendimento,
+                attendance_number=patient.nr_atendimento,
+                location=location,
+                date_in=patient.dt_entrada,
+                uti=patient.cd_unidade,
+                birth=patient.dt_nascimento,
+                sex=patient.ie_sexo,
+                url='https://' + settings.SITE_NAME + settings.MEDIA_URL + "ftp-iop/" + filter_name,
+                tipo_documento='d',
+            )
+            '''
+
             try:
                 # shutil.copyfile(path + filter_name,
                 #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
@@ -211,10 +233,8 @@ def processar_digitalizado_domed():
                             settings.PATH_MOVE_FILES_TO + caminho_base)
             except FileNotFoundError:
                 pass
-
         except TasyPatient.DoesNotExist:
             pass
-
 
 def processar_prontuarios():
     # prontuários sem qrcode de todas as unidades são processados aqui
@@ -313,7 +333,7 @@ def processar_prontuarios():
 def start():
     scheduler = BackgroundScheduler()
     scheduler.add_job(processar_digitalizado_iop, 'interval', seconds=settings.TIME_TO_READ_FILES,)
-    # scheduler.add_job(processar_digitalizado_domed, 'interval', seconds=settings.TIME_TO_READ_FILES,)
+    scheduler.add_job(processar_digitalizado_domed, 'interval', seconds=settings.TIME_TO_READ_FILES,)
     scheduler.add_job(processar_prontuarios, 'interval', seconds=settings.TIME_TO_READ_FILES, )
 
     scheduler.start()
