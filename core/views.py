@@ -16,7 +16,7 @@ from rest_framework_jwt.utils import jwt_encode_handler
 class HomeView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'core/index.html'
-    permission_classes = (IsAuthenticated,)
+    permission_classes = []
 
     def get(self, request):
         payload = jwt_payload_handler(self.request.user)
@@ -29,7 +29,7 @@ class HomeView(APIView):
 class AdministradorView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'core/administracao.html'
-    permission_classes = (IsAuthenticated,)
+    permission_classes = []
 
     def get(self, request):
         payload = jwt_payload_handler(self.request.user)
