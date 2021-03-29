@@ -303,9 +303,12 @@ def processar_prontuario_iop():
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(processar_digitalizado_iop,'interval',
+    scheduler.add_job(processar_digitalizado_iop, 'interval',
                       seconds=settings.TIME_TO_READ_FILES,
                       id="processar_digitalizado_iop")
+    scheduler.add_job(processar_digitalizado_domed, 'interval',
+                      seconds=settings.TIME_TO_READ_FILES,
+                      id="processar_digitalizado_domed")
     scheduler.add_job(processar_prontuario_iop, 'interval',
                       seconds=settings.TIME_TO_READ_FILES,
                       id="processar_prontuario_iop")
