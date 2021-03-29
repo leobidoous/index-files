@@ -80,16 +80,19 @@ def processar_digitalizado_iop():
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
+                'url': settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
                 'tipo_documento': 'd',
             }
             try:
                 if indexed:
-                    last_file = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
+                    last_file = indexed.url.split(settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed,
                                                                     data=indexed_file_dict,
                                                                     partial=True)
-                    os.remove(settings.PATH_MOVE_FILES_TO + last_file)
+                    try:
+                        os.remove(settings.PATH_MOVE_FILES_TO + last_file)
+                    except Exception as e:
+                        pass
                 else:
                     indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
 
@@ -192,12 +195,12 @@ def processar_digitalizado_domed():
                 'uti': patient.cd_unidade,
                 'birth': patient.dt_nascimento,
                 'sex': patient.ie_sexo,
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
+                'url': settings.SITE_NAME + settings.MEDIA_URL + directory + 'digitalizado/' + filter_name,
                 'tipo_documento': 'd',
             }
             try:
                 if indexed:
-                    last_file = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
+                    last_file = indexed.url.split(settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed,
                                                                     data=indexed_file_dict,
                                                                     partial=True)
@@ -243,7 +246,7 @@ def processar_digitalizado_domed():
 def processar_prontuarios():
     # prontuários sem qrcode de todas as unidades são processados aqui
 
-    for index, path in enumerate(pathlib.Path(settings.PATH_PRONTUARIOS).iterdir()):
+    for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
         file_handle = StringIO()
         manager = PDFResourceManager()
@@ -280,7 +283,7 @@ def processar_prontuarios():
                 'date_in': datetime.strptime(text[16], '%d/%m/%Y %H:%M:%S'),
                 'date_file': datetime.strptime(text[60], '%d/%m/%Y'),
                 'uti': text[19],
-                'url': 'https://' + settings.SITE_NAME + settings.MEDIA_URL + caminho_base,
+                'url': settings.SITE_NAME + settings.MEDIA_URL + caminho_base,
                 'tipo_documento': 'p',
             }
 
@@ -312,7 +315,7 @@ def processar_prontuarios():
                 if indexed:
                     # Se existir uma query, então pega o último e atualiza
                     indexed = indexed.order_by('-updated_at').first()
-                    arquivo_anterior = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
+                    arquivo_anterior = indexed.url.split(settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed, data=indexed_file_dict, partial=True)
 
                     os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
