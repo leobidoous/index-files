@@ -4,8 +4,10 @@ import os
 import pathlib
 import shutil
 from datetime import datetime
-from io import StringIO
-
+from io import StringIO, BytesIO
+import slate3k as slate
+from PyPDF2 import PdfFileReader
+import pikepdf
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
 from pdfminer.converter import TextConverter
@@ -215,13 +217,25 @@ def processar_prontuario_iop():
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
         file_handle = StringIO()
+
         manager = PDFResourceManager()
         converter = TextConverter(manager, file_handle, laparams=LAParams(char_margin=0.01))
         interpreter = PDFPageInterpreter(manager, converter)
-        fh = open(str(path), 'rb')
-        for page in PDFPage.get_pages(fh, maxpages=1, check_extractable=False):
+        # fh = open(str(path), 'rb')
+        # doc = slate.PDF(fh)
+
+        doc_bytes = BytesIO()
+        with pikepdf.open(str(path)) as documento:
+            documento.save(doc_bytes)
+
+        reader = PdfFileReader(doc_bytes)
+        # page = reader.getPage(0)
+        # page = doc[0]
+        for page in PDFPage.get_pages(doc_bytes, maxpages=1, check_extractable=False):
             interpreter.process_page(page)
-        fh.close()
+        # for page in PDFPage.get_pages(fh, maxpages=1, check_extractable=False):
+        #     interpreter.process_page(page)
+        #fh.close()
 
         text = file_handle.getvalue()
         caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
@@ -287,7 +301,7 @@ def processar_prontuario_iop():
                     # shutil.copyfile(fh.name,
                     #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-                    shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
+                    shutil.move(path.name, settings.PATH_MOVE_FILES_TO + caminho_base)
 
                 except Exception as e:
                     pass
