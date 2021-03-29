@@ -85,9 +85,11 @@ def processar_digitalizado_iop():
             }
             try:
                 if indexed:
+                    last_file = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed,
                                                                     data=indexed_file_dict,
                                                                     partial=True)
+                    os.remove(settings.PATH_MOVE_FILES_TO + last_file)
                 else:
                     indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
 
@@ -195,9 +197,11 @@ def processar_digitalizado_domed():
             }
             try:
                 if indexed:
+                    last_file = indexed.url.split(settings.SITE_NAME + settings.MEDIA_URL)[1]
                     indexed_file_serializer = IndexedFileSerializer(instance=indexed,
                                                                     data=indexed_file_dict,
                                                                     partial=True)
+                    os.remove(settings.PATH_MOVE_FILES_TO + last_file)
                 else:
                     indexed_file_serializer = IndexedFileSerializer(data=indexed_file_dict)
 
