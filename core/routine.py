@@ -219,7 +219,7 @@ def processar_prontuario_iop():
         converter = TextConverter(manager, file_handle, laparams=LAParams(char_margin=0.01))
         interpreter = PDFPageInterpreter(manager, converter)
         fh = open(str(path), 'rb')
-        for page in PDFPage.get_pages(fh, maxpages=1):
+        for page in PDFPage.get_pages(fh, maxpages=1, check_extractable=False):
             interpreter.process_page(page)
         fh.close()
 
