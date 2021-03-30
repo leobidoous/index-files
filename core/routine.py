@@ -282,8 +282,10 @@ def processar_prontuario_iop():
                     indexed_file_serializer = ArquivoIndexadoRoutineSerializer(instance=arquivo,
                                                                                data=arquivo_indexado_dict,
                                                                                partial=True)
-
-                    os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+                    try:
+                        os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
+                    except Exception as e:
+                        pass
                 else:
                     indexed_file_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
                 indexed_file_serializer.is_valid(raise_exception=True)
