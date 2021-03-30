@@ -294,7 +294,7 @@ def processar_prontuario_iop():
                     # shutil.copyfile(fh.name,
                     #                 settings.PATH_MOVE_FILES_TO_LOCAL + caminho_base)
 
-                    shutil.move(path.name, settings.PATH_MOVE_FILES_TO + caminho_base)
+                    shutil.move(fh.name, settings.PATH_MOVE_FILES_TO + caminho_base)
 
                 except Exception as e:
                     pass
