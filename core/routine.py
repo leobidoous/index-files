@@ -223,6 +223,7 @@ def processar_prontuario_iop():
         fh = open(str(path), 'rb')
         file = PdfFileReader(str(path))
         if file.isEncrypted:
+            print("Arquivo " + path.name + " está encriptado!!")
             fh.close()
             continue
         for page in PDFPage.get_pages(fh, maxpages=1, check_extractable=False):
