@@ -35,8 +35,8 @@
     </style>
 
 </head>
+<body id="page-top">
 {% if user.is_authenticated %}
-    <body id="page-top">
 
 
     <!-- Navbar -->
@@ -81,8 +81,10 @@
 
 
     <div id="content">
-        {% block content %}
-        {% endblock %}
+        <div id="content" style="height: 100%; width: 100%">
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
 
