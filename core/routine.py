@@ -212,7 +212,7 @@ def processar_digitalizado_domed():
             pass
 
 
-def processar_prontuario_iop():
+def processar_prontuarios():
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
         file_handle = StringIO()
@@ -231,7 +231,7 @@ def processar_prontuario_iop():
         fh.close()
 
         text = file_handle.getvalue()
-        caminho_base = settings.PATH_IOP + 'prontuario/' + path.stem + '.pdf'
+        caminho_base = 'prontuarios/' + path.stem + '.pdf'
 
         text = text.split('Profissional')[0].split('\n')
         try:
@@ -316,8 +316,8 @@ def start():
     scheduler.add_job(processar_digitalizado_domed, 'interval',
                       seconds=settings.TIME_TO_READ_FILES,
                       id="processar_digitalizado_domed")
-    scheduler.add_job(processar_prontuario_iop, 'interval',
+    scheduler.add_job(processar_prontuarios, 'interval',
                       seconds=settings.TIME_TO_READ_FILES,
-                      id="processar_prontuario_iop")
+                      id="processar_prontuarios")
 
     scheduler.start()
