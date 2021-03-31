@@ -15,5 +15,5 @@ class ArquivoIndexadoFilter(filters.FilterSet):
                   'cpf', 'estabelecimento', 'data_entrada', 'setor', 'tipo_documento')
 
     @staticmethod
-    def filter_data(queryset, value):
+    def filter_data(self, queryset, name, value):
         return queryset.filter(data_entrada__range=[value, value + timedelta(days=1)])
