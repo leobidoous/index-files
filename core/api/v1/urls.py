@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework_nested import routers
 
-from core.api.v1.views import ArquivoIndexadoViewSet, SetorViewSet, EstabelecimentoViewSet
+from core.api.v1.views import ArquivoIndexadoViewSet, SetorViewSet, EstabelecimentoViewSet, ConvenioViewSet
 
 # app_name = 'v1'
 
@@ -10,6 +10,7 @@ router.register('arquivo_indexado', ArquivoIndexadoViewSet, basename='arquivo_in
 router.register('estabelecimento', EstabelecimentoViewSet, basename='estabelecimento')
 estabelecimento_router = routers.NestedSimpleRouter(router, 'estabelecimento', lookup='estabelecimento')
 estabelecimento_router.register('setor', SetorViewSet, basename='setor')
+router.register('convenio', ConvenioViewSet, basename='convenio')
 
 
 urlpatterns = [

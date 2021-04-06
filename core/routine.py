@@ -8,6 +8,7 @@ from io import StringIO
 
 from PyPDF2 import PdfFileReader
 from apscheduler.schedulers.background import BackgroundScheduler
+from celery import shared_task
 from django.conf import settings
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -19,6 +20,7 @@ from core.models import Estabelecimento, Convenio, ArquivoIndexado, Setor, TasyP
 from qrcode.manage_qr_code import ManageQrCode
 
 
+@shared_task
 def processar_digitalizado_iop():
     pasta = settings.PATH_IOP
     path = settings.PATH_FILES + pasta
@@ -116,6 +118,7 @@ def processar_digitalizado_iop():
             pass
 
 
+@shared_task()
 def processar_digitalizado_domed():
     pasta = settings.PATH_DOMED
     path = settings.PATH_FILES + pasta
@@ -212,6 +215,7 @@ def processar_digitalizado_domed():
             pass
 
 
+@shared_task()
 def processar_prontuarios():
     for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
@@ -308,16 +312,16 @@ def processar_prontuarios():
             print("Impossível registrar o arquivo: " + path.name + ' || Estrutura inválida...')
 
 
-def start():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(processar_digitalizado_iop, 'interval',
-                      seconds=settings.TIME_TO_READ_FILES,
-                      id="processar_digitalizado_iop")
-    scheduler.add_job(processar_digitalizado_domed, 'interval',
-                      seconds=settings.TIME_TO_READ_FILES,
-                      id="processar_digitalizado_domed")
-    scheduler.add_job(processar_prontuarios, 'interval',
-                      seconds=settings.TIME_TO_READ_FILES,
-                      id="processar_prontuarios")
-
-    scheduler.start()
+# def start():
+#     scheduler = BackgroundScheduler()
+#     scheduler.add_job(processar_digitalizado_iop, 'interval',
+#                       seconds=settings.TIME_TO_READ_FILES,
+#                       id="processar_digitalizado_iop")
+#     scheduler.add_job(processar_digitalizado_domed, 'interval',
+#                       seconds=settings.TIME_TO_READ_FILES,
+#                       id="processar_digitalizado_domed")
+#     scheduler.add_job(processar_prontuarios, 'interval',
+#                       seconds=settings.TIME_TO_READ_FILES,
+#                       id="processar_prontuarios")
+#
+#     scheduler.start()
