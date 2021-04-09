@@ -234,6 +234,9 @@ PATH_FILES = "/srv/ftp/"
 PATH_IOP = "ftp-iop/"
 PATH_DOMED = "ftp-domed/"
 
+PATH_PRONTUARIOS_ERRO = 'prontuarios_erros/'
+PATH_PRONTUARIOS_ERRO_ENCRIPTADO = 'encriptado/'
+PATH_PRONTUARIOS_ERRO_ESTRUTURAL = 'estrutural/'
 PATH_MOVE_FILES_TO = BASE_DIR + MEDIA_URL
 PATH_MOVE_FILES_TO_LOCAL = PATH_MOVE_FILES_TO + 'local/'
 
@@ -243,9 +246,14 @@ CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://localhost')
 
 TIME_TO_READ_FILES = 3600  # in seconds
 
+try:
+    from .path import *
+except ImportError:
+    print("Insira seus PATH_<NOME_DA_UNIDADE> em path.py! Arquivo não encontrado.")
 
 try:
     from .local_settings import *
+
 except ImportError:
     print("BACKEND EM PRODUÇÃO")
 

@@ -14,15 +14,31 @@ def core_job() -> dict:
     return {
         'processar_digitalizado_iop': {
             'task': 'core.routine.processar_digitalizado_iop',
-            'schedule': crontab(minute='*/60'),
+            'schedule': crontab(minute='*/10'),
         },
         'processar_digitalizado_domed': {
             'task': 'core.routine.processar_digitalizado_domed',
-            'schedule': crontab(minute='*/60'),
+            'schedule': crontab(minute='*/10'),
+        },
+        'processar_digitalizado_hoc': {
+            'task': 'core.routine.processar_digitalizado_hoc',
+            'schedule': crontab(minute='*/10'),
+        },
+        'processar_digitalizado_paraupebas': {
+            'task': 'core.routine.processar_digitalizado_paraupebas',
+            'schedule': crontab(minute='*/10'),
+        },
+        'processar_digitalizado_barreiras': {
+            'task': 'core.routine.processar_digitalizado_barreiras',
+            'schedule': crontab(minute='*/10'),
+        },
+        'processar_digitalizado_ituitaba': {
+            'task': 'core.routine.processar_digitalizado_ituitaba',
+            'schedule': crontab(minute='*/10'),
         },
         'processar_prontuarios': {
             'task': 'core.routine.processar_prontuarios',
-            'schedule': crontab(minute='*/60'),
+            'schedule': crontab(minute='*/10'),
         },
     }
 
