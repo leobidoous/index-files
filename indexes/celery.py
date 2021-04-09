@@ -14,15 +14,15 @@ def core_job() -> dict:
     return {
         'processar_digitalizado_iop': {
             'task': 'core.routine.processar_digitalizado_iop',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute='*/60'),
         },
         'processar_digitalizado_domed': {
             'task': 'core.routine.processar_digitalizado_domed',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute='*/60'),
         },
         'processar_prontuarios': {
             'task': 'core.routine.processar_prontuarios',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute='*/60'),
         },
     }
 

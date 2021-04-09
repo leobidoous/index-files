@@ -94,7 +94,7 @@ def processar_digitalizado_iop():
             pass
 
 
-@shared_task()
+@shared_task
 def processar_digitalizado_domed():
     pasta = settings.PATH_DOMED
     path = settings.PATH_FILES + pasta
@@ -167,9 +167,9 @@ def processar_digitalizado_domed():
             pass
 
 
-@shared_task()
+@shared_task
 def processar_prontuarios():
-    for index, path in enumerate(pathlib.Path(settings.PATH_FILES + settings.PATH_PRONTUARIOS).iterdir()):
+    for index, path in enumerate(pathlib.Path(settings.PATH_PRONTUARIOS).iterdir()):
         # start = time.time()
         file_handle = StringIO()
 
