@@ -53,16 +53,6 @@ def processar_digitalizado_iop():
                                                          estabelecimento_id=estabelecimento.id)
             convenio, created = Convenio.objects.get_or_create(nome=paciente.ds_convenio)
 
-            # Tenta encontrar um arquivo pré existente para efetuar um update nele (caso exista)
-            arquivo = ArquivoIndexado.objects.filter(nome=paciente.ds_pessoa_fisica,
-                                                     cpf=paciente.nr_cpf,
-                                                     numero_atendimento=paciente.nr_atendimento,
-                                                     numero_prontuario=paciente.nr_prontuario, )
-
-            if arquivo:
-                # Pega o último atualizado (por precaução)
-                arquivo = arquivo.order_by('-atualizado_em').first()
-
             caminho_base = pasta + 'digitalizado/' + filter_name
 
             # Payload do IndexFile
@@ -86,30 +76,16 @@ def processar_digitalizado_iop():
             }
 
             try:
-                if arquivo:
-                    arquivo_anterior = arquivo.url.split(settings.MEDIA_URL)[1]
-                    arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(instance=arquivo,
-                                                                                   data=arquivo_indexado_dict,
-                                                                                   partial=True)
-                    try:
-                        os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
-                    except Exception as e:
-                        pass
-                else:
-                    arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
+                arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
 
                 arquivo_indexado_serializer.is_valid(raise_exception=True)
                 arquivo_indexado_serializer.save()
 
                 try:
-                    # shutil.copyfile(path + filter_name,
-                    #                 settings.PATH_MOVE_FILES_TO_LOCAL + pasta + 'digitalizado/' + filter_name)
-
                     shutil.move(path + filter_name,
                                 settings.PATH_MOVE_FILES_TO + caminho_base)
                 except FileNotFoundError:
                     pass
-
 
             except Exception as e:
                 print(repr(e))
@@ -151,16 +127,6 @@ def processar_digitalizado_domed():
                                                          estabelecimento_id=estabelecimento.id)
             convenio, created = Convenio.objects.get_or_create(nome=paciente.ds_convenio)
 
-            # Tenta encontrar um arquivo pré existente para efetuar um update nele (caso exista)
-            arquivo = ArquivoIndexado.objects.filter(nome=paciente.ds_pessoa_fisica,
-                                                     cpf=paciente.nr_cpf,
-                                                     numero_atendimento=paciente.nr_atendimento,
-                                                     numero_prontuario=paciente.nr_prontuario, )
-
-            if arquivo:
-                # Pega o último atualizado (por precaução)
-                arquivo = arquivo.order_by('-atualizado_em').first()
-
             caminho_base = pasta + 'digitalizado/' + filter_name
 
             # Payload do IndexFile
@@ -184,29 +150,15 @@ def processar_digitalizado_domed():
             }
 
             try:
-                if arquivo:
-                    arquivo_anterior = arquivo.url.split(settings.MEDIA_URL)[1]
-                    arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(instance=arquivo,
-                                                                                   data=arquivo_indexado_dict,
-                                                                                   partial=True)
-                    if arquivo_anterior:
-                        os.remove(settings.PATH_MOVE_FILES_TO + arquivo_anterior)
-
-                else:
-                    arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
-
+                arquivo_indexado_serializer = ArquivoIndexadoRoutineSerializer(data=arquivo_indexado_dict)
                 arquivo_indexado_serializer.is_valid(raise_exception=True)
                 arquivo_indexado_serializer.save()
 
                 try:
-                    # shutil.copyfile(path + filter_name,
-                    #                 settings.PATH_MOVE_FILES_TO_LOCAL + pasta + 'digitalizado/' + filter_name)
-
                     shutil.move(path + filter_name,
                                 settings.PATH_MOVE_FILES_TO + caminho_base)
                 except FileNotFoundError:
                     pass
-
 
             except Exception as e:
                 print(repr(e))
