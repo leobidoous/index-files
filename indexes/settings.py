@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import datetime
 import os
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -31,7 +32,8 @@ SECRET_KEY = 'qz2y0%mfa5n&azpkd1t$g6$k8%=)8s6$idc34u_u!8@ds3kz3q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-SITE_NAME = 'prontuario.ahlabs.net'
+# É preciso ter http ou https no SITE_NAME
+SITE_NAME = 'https://prontuario.ahlabs.net'
 
 ALLOWED_HOSTS = ['prontuario.ahlabs.net',
                  '172.20.0.38']
@@ -51,6 +53,8 @@ INSTALLED_APPS = [
     # libs
     'widget_tweaks',
     'rest_framework',
+    'django_filters',
+    'corsheaders',
 
     # apps
     'user',
@@ -64,12 +68,18 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = ['*']
+CORS_ALLOW_HEADERS = ['*']
+
 
 ROOT_URLCONF = 'indexes.urls'
 
@@ -140,7 +150,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 JWT_AUTH = {
@@ -218,21 +229,23 @@ LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
-PATH_PRONTUARIOS = "/mnt/tasyschedulerweb/"
-PATH_FILES = "/srv/ftp/"
-PATH_IOP = "ftp-iop/"
-PATH_DOMED = "ftp-domed/"
-
 PATH_MOVE_FILES_TO = BASE_DIR + MEDIA_URL
 PATH_MOVE_FILES_TO_LOCAL = PATH_MOVE_FILES_TO + 'local/'
 
-URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/indexes/"
+URL_LOAD_FILES = "https://prontuario.ahlabs.net/api/v1/index_files/"
+
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://localhost')
 
 TIME_TO_READ_FILES = 3600  # in seconds
 
+try:
+    from .path import *
+except ImportError:
+    print("Insira seus PATH_<NOME_DA_UNIDADE> em path.py! Arquivo não encontrado.")
 
 try:
     from .local_settings import *
+
 except ImportError:
     print("BACKEND EM PRODUÇÃO")
 

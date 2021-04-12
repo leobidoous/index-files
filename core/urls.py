@@ -16,16 +16,17 @@ Including another URLconf
 from django.contrib.auth.views import LogoutView, LoginView
 from django.urls import path, include
 
-from core.views import HomeView, SolicitarRedefinirSenha, RedefinirSenhaCompleto, RedefinirSenha
+from core import views
 
 app_name = 'core'
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
-    path('api/', include('core.api.urls', namespace="api")),
+    path('', views.HomeView.as_view(), name='home'),
+    path('administracao/', views.AdministradorView.as_view(), name="administrador"),
+    path('api/', include('core.api.urls')),
     path('logout/', LogoutView.as_view(next_page='core:login'), name='logout'),
     path('login/', LoginView.as_view(template_name='core/base_login.html'), name='login'),
-    path('redefinir-senha', SolicitarRedefinirSenha.as_view(), name='reset_password'),
-    path('redefinir-senha/done', RedefinirSenhaCompleto.as_view(), name='password_reset_done'),
-    path('reset/<str:uidb64>/<str:token>/', RedefinirSenha.as_view(), name='password_reset_confirm'),
+    path('redefinir-senha', views.SolicitarRedefinirSenha.as_view(), name='reset_password'),
+    path('redefinir-senha/done', views.RedefinirSenhaCompleto.as_view(), name='password_reset_done'),
+    path('reset/<str:uidb64>/<str:token>/', views.RedefinirSenha.as_view(), name='password_reset_confirm'),
 ]
