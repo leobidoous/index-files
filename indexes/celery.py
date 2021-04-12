@@ -32,7 +32,7 @@ def core_job() -> dict:
             'task': 'core.routine.processar_digitalizado_barreiras',
             'schedule': crontab(minute='*/10'),
         },
-        'processar_digitalizado_ituitaba': {
+        'processar_digitalizado_ituiutaba': {
             'task': 'core.routine.processar_digitalizado_ituiutaba',
             'schedule': crontab(minute='*/10'),
         },
