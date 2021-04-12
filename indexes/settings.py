@@ -229,14 +229,6 @@ LOGOUT_URL = 'authentication:login'
 
 EDOK_API_KEY = 'tlfHclrzx0Tkch9gxBjcD6ZApH4bgkWxzs8vQ1Bc2aHqfDHtlTEbxTyibG2k'
 
-PATH_PRONTUARIOS = "/mnt/tasyschedulerweb/"
-PATH_FILES = "/srv/ftp/"
-PATH_IOP = "ftp-iop/"
-PATH_DOMED = "ftp-domed/"
-
-PATH_PRONTUARIOS_ERRO = 'prontuarios_erros/'
-PATH_PRONTUARIOS_ERRO_ENCRIPTADO = 'encriptado/'
-PATH_PRONTUARIOS_ERRO_ESTRUTURAL = 'estrutural/'
 PATH_MOVE_FILES_TO = BASE_DIR + MEDIA_URL
 PATH_MOVE_FILES_TO_LOCAL = PATH_MOVE_FILES_TO + 'local/'
 
