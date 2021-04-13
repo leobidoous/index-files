@@ -33,7 +33,7 @@ def core_job() -> dict:
             'schedule': crontab(minute='*/10'),
         },
         'processar_digitalizado_ituitaba': {
-            'task': 'core.routine.processar_digitalizado_ituitaba',
+            'task': 'core.routine.processar_digitalizado_ituiutaba',
             'schedule': crontab(minute='*/10'),
         },
         'processar_prontuarios': {
